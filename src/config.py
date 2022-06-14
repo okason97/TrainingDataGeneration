@@ -455,7 +455,9 @@ class Configurations(object):
             self.MODULES.d_linear = ops.linear
             self.MODULES.d_embedding = ops.embedding
 
-        if self.MODEL.g_cond_mtd == "cBN" or self.MODEL.g_info_injection == "cBN" or self.MODEL.backbone == "big_resnet":
+        if self.MODEL.g_cond_mtd == "SPADE":
+            self.MODULES.g_bn = ops.SPADE
+        elif self.MODEL.g_cond_mtd == "cBN" or self.MODEL.g_info_injection == "cBN" or self.MODEL.backbone == "big_resnet":
             self.MODULES.g_bn = ops.ConditionalBatchNorm2d
         elif self.MODEL.g_cond_mtd == "W/O":
             self.MODULES.g_bn = ops.batchnorm_2d

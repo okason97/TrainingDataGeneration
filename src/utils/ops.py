@@ -10,6 +10,27 @@ import torch
 import torch.nn as nn
 import numpy as np
 
+class SPADE(nn.Module):
+    def __init__(self, in_channels, out_channels, MODULES):
+        super().__init__()
+        hidden_channels = 128
+        self.in_features = in_channels
+        self.bn = batchnorm_2d(out_channels, eps=1e-4, momentum=0.1, affine=False)
+        self.shared = nn.Sequential(
+            MODULES.g_conv2d(in_channels, hidden_channels, kernel_size=3, padding=1),
+            nn.ReLU()
+        )
+
+        self.gain = MODULES.g_conv2d(hidden_channels, out_channels, bias=False, kernel_size=3, padding=1)
+        self.bias = MODULES.g_conv2d(hidden_channels, out_channels, bias=False, kernel_size=3, padding=1)
+
+    def forward(self, x, y):
+        y = nn.functional.interpolate(y, size=x.size()[2:], mode='nearest')
+        y = self.shared(y)
+        gain = 1 + self.gain(y)
+        bias = self.bias(y)
+        out = self.bn(x)
+        return out * gain + bias
 
 class ConditionalBatchNorm2d(nn.Module):
     # https://github.com/voletiv/self-attention-GAN-pytorch

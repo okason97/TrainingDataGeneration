@@ -39,7 +39,7 @@ __all__ = ["compute_prdc"]
 
 
 def compute_real_fake_embeddings(fake_feats, data_loader, num_generate, batch_size, eval_model,
-                                 quantize, world_size, DDP, disable_tqdm):
+                                 quantize, world_size, DDP, pose, disable_tqdm):
     data_iter = iter(data_loader)
     num_batches = int(math.ceil(float(num_generate) / float(batch_size)))
     if DDP: num_batches = num_batches//world_size + 1
@@ -47,7 +47,10 @@ def compute_real_fake_embeddings(fake_feats, data_loader, num_generate, batch_si
     real_embeds = []
     for i in tqdm(range(num_batches), disable=disable_tqdm):
         try:
-            real_images, real_labels = next(data_iter)
+            if pose:
+                real_images, real_labels, real_poses = next(data_iter)
+            else:
+                real_images, real_labels = next(data_iter)
         except StopIteration:
             break
 
@@ -75,6 +78,7 @@ def calculate_pr_dc(fake_feats, data_loader, eval_model, num_generate, cfgs, qua
                                                             quantize=quantize,
                                                             world_size=world_size,
                                                             DDP=DDP,
+                                                            pose=cfgs.RUN.pose,
                                                             disable_tqdm=disable_tqdm)
 
     metrics = compute_prdc(real_features=real_embeds, fake_features=fake_embeds, nearest_k=nearest_k)

@@ -74,9 +74,13 @@ class Generator(nn.Module):
         self.out_dims = g_out_dims_collection[str(img_size)]
         self.bottom = bottom_collection[str(img_size)]
         self.num_blocks = len(self.in_dims)
-        self.chunk_size = z_dim // (self.num_blocks + 1)
-        self.affine_input_dim = self.chunk_size
-        assert self.z_dim % (self.num_blocks + 1) == 0, "z_dim should be divided by the number of blocks"
+        if self.g_cond_mtd == "SPADE":
+            self.chunk_size = z_dim
+            self.affine_input_dim = 0
+        else:
+            self.chunk_size = z_dim // (self.num_blocks + 1)
+            self.affine_input_dim = self.chunk_size
+            assert self.z_dim % (self.num_blocks + 1) == 0, "z_dim should be divided by the number of blocks"
 
         info_dim = 0
         if self.MODEL.info_type in ["discrete", "both"]:
@@ -129,16 +133,19 @@ class Generator(nn.Module):
                     z, z_info = z[:, :self.z_dim], z[:, self.z_dim:]
                     affine_list.append(self.info_proj_linear(z_info))
 
-            zs = torch.split(z, self.chunk_size, 1)
-            z = zs[0]
-            if self.g_cond_mtd != "W/O":
-                if shared_label is None:
-                    shared_label = self.shared(label)
-                affine_list.append(shared_label)
-            if len(affine_list) == 0:
-                affines = [item for item in zs[1:]]
+            if self.g_cond_mtd == "SPADE":
+                affines = label
             else:
-                affines = [torch.cat(affine_list + [item], 1) for item in zs[1:]]
+                zs = torch.split(z, self.chunk_size, 1)
+                z = zs[0]
+                if self.g_cond_mtd != "W/O":
+                    if shared_label is None:
+                        shared_label = self.shared(label)
+                    affine_list.append(shared_label)
+                if len(affine_list) == 0:
+                    affines = [item for item in zs[1:]]
+                else:
+                    affines = [torch.cat(affine_list + [item], 1) for item in zs[1:]]
 
             act = self.linear0(z)
             act = act.view(-1, self.in_dims[0], self.bottom, self.bottom)
@@ -148,8 +155,11 @@ class Generator(nn.Module):
                     if isinstance(block, ops.SelfAttention):
                         act = block(act)
                     else:
-                        act = block(act, affines[counter])
-                        counter += 1
+                        if self.g_cond_mtd == "SPADE":
+                            act = block(act, affines)
+                        else:
+                            act = block(act, affines[counter])
+                            counter += 1
 
             act = self.bn4(act)
             act = self.activation(act)
@@ -246,12 +256,17 @@ class Discriminator(nn.Module):
     def __init__(self, img_size, d_conv_dim, apply_d_sn, apply_attn, attn_d_loc, d_cond_mtd, aux_cls_type, d_embed_dim, normalize_d_embed,
                  num_classes, d_init, d_depth, mixed_precision, MODULES, MODEL):
         super(Discriminator, self).__init__()
+        self.d_cond_mtd = d_cond_mtd
+        if self.d_cond_mtd == "CAT":
+            keypoints_dim = 21
+        else:
+            keypoints_dim = 0
         d_in_dims_collection = {
-            "32": [3] + [d_conv_dim * 2, d_conv_dim * 2, d_conv_dim * 2],
-            "64": [3] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8],
-            "128": [3] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 16],
-            "256": [3] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16],
-            "512": [3] + [d_conv_dim, d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16]
+            "32": [3 + keypoints_dim] + [d_conv_dim * 2, d_conv_dim * 2, d_conv_dim * 2],
+            "64": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8],
+            "128": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 16],
+            "256": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16],
+            "512": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16]
         }
 
         d_out_dims_collection = {
@@ -352,6 +367,8 @@ class Discriminator(nn.Module):
             mi_embed, mi_proxy, mi_cls_output = None, None, None
             info_discrete_c_logits, info_conti_mu, info_conti_var = None, None, None
             h = x
+            if self.d_cond_mtd == "CAT":
+                h = torch.cat((x, label), 1)
             for index, blocklist in enumerate(self.blocks):
                 for block in blocklist:
                     h = block(h)
@@ -394,7 +411,7 @@ class Discriminator(nn.Module):
             elif self.d_cond_mtd == "MD":
                 idx = torch.LongTensor(range(label.size(0))).to(label.device)
                 adv_output = adv_output[idx, label]
-            elif self.d_cond_mtd in ["W/O", "MH"]:
+            elif self.d_cond_mtd in ["W/O", "MH", "CAT"]:
                 pass
             else:
                 raise NotImplementedError

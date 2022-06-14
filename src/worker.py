@@ -169,7 +169,7 @@ class WORKER(object):
             self.num_eval = {}
             if self.train_dataloader is not None:
                 self.num_eval["train"] = len(self.train_dataloader.dataset)
-            elif self.eval_dataloader is not None:
+            if self.eval_dataloader is not None:
                 self.num_eval["test"] = len(self.eval_dataloader.dataset)
                 self.num_eval["valid"] = len(self.eval_dataloader.dataset)
 
@@ -210,7 +210,10 @@ class WORKER(object):
 
     def sample_data_basket(self):
         try:
-            real_image_basket, real_label_basket = next(self.train_iter)
+            if self.RUN.pose:
+                real_image_basket, real_label_basket, real_pose_basket = next(self.train_iter)
+            else:
+                real_image_basket, real_label_basket = next(self.train_iter)
         except StopIteration:
             self.epoch_counter += 1
             if self.RUN.train and self.DDP:
@@ -218,10 +221,17 @@ class WORKER(object):
             else:
                 pass
             self.train_iter = iter(self.train_dataloader)
-            real_image_basket, real_label_basket = next(self.train_iter)
+            if self.RUN.pose:
+                real_image_basket, real_label_basket, real_pose_basket = next(self.train_iter)
+            else:
+                real_image_basket, real_label_basket = next(self.train_iter)
         real_image_basket = torch.split(real_image_basket, self.OPTIMIZATION.batch_size)
         real_label_basket = torch.split(real_label_basket, self.OPTIMIZATION.batch_size)
-        return real_image_basket, real_label_basket
+        if self.RUN.pose:
+            real_pose_basket = torch.split(real_pose_basket, self.OPTIMIZATION.batch_size)
+        else:
+            real_pose_basket = None
+        return real_image_basket, real_label_basket, real_pose_basket
 
     # -----------------------------------------------------------------------------
     # train Discriminator
@@ -240,14 +250,17 @@ class WORKER(object):
             misc.toggle_grad(getattr(misc.peel_model(self.Dis), self.MISC.info_params[2]), grad=False, num_freeze_layers=-1, is_stylegan=False)
         self.Gen.apply(misc.untrack_bn_statistics)
         # sample real images and labels from the true data distribution
-        real_image_basket, real_label_basket = self.sample_data_basket()
+        real_image_basket, real_label_basket, real_pose_basket = self.sample_data_basket()
         for step_index in range(self.OPTIMIZATION.d_updates_per_step):
             self.OPTIMIZATION.d_optimizer.zero_grad()
             for acml_index in range(self.OPTIMIZATION.acml_steps):
                 with torch.cuda.amp.autocast() if self.RUN.mixed_precision and not self.is_stylegan else misc.dummy_context_mgr() as mpc:
                     # load real images and labels onto the GPU memory
                     real_images = real_image_basket[batch_counter].to(self.local_rank, non_blocking=True)
-                    real_labels = real_label_basket[batch_counter].to(self.local_rank, non_blocking=True)
+                    if self.MODEL.d_cond_mtd == 'CAT':
+                        real_labels = real_pose_basket[batch_counter].to(self.local_rank, non_blocking=True)
+                    else:
+                        real_labels = real_label_basket[batch_counter].to(self.local_rank, non_blocking=True)
                     # sample fake images and labels from p(G(z), y)
                     fake_images, fake_labels, fake_images_eps, trsp_cost, ws, _, _ = sample.generate_images(
                         z_prior=self.MODEL.z_prior,
@@ -255,7 +268,7 @@ class WORKER(object):
                         batch_size=self.OPTIMIZATION.batch_size,
                         z_dim=self.MODEL.z_dim,
                         num_classes=self.DATA.num_classes,
-                        y_sampler="totally_random",
+                        y_sampler= iter(self.train_dataloader) if self.RUN.pose else "totally_random",
                         radius=self.LOSS.radius,
                         generator=self.Gen,
                         discriminator=self.Dis,
@@ -533,7 +546,7 @@ class WORKER(object):
                         batch_size=self.OPTIMIZATION.batch_size,
                         z_dim=self.MODEL.z_dim,
                         num_classes=self.DATA.num_classes,
-                        y_sampler="totally_random",
+                        y_sampler=iter(self.train_dataloader) if self.RUN.pose else "totally_random",
                         radius=self.LOSS.radius,
                         generator=self.Gen,
                         discriminator=self.Dis,
@@ -597,7 +610,7 @@ class WORKER(object):
 
                     # apply feature matching regularization to stabilize adversarial dynamics
                     if self.LOSS.apply_fm:
-                        real_image_basket, real_label_basket = self.sample_data_basket()
+                        real_image_basket, real_label_basket, real_pose_basket = self.sample_data_basket()
                         real_images = real_image_basket[0].to(self.local_rank, non_blocking=True)
                         real_labels = real_label_basket[0].to(self.local_rank, non_blocking=True)
                         real_images_ = self.AUG.series_augment(real_images)
@@ -653,7 +666,7 @@ class WORKER(object):
                         batch_size=self.OPTIMIZATION.batch_size // 2,
                         z_dim=self.MODEL.z_dim,
                         num_classes=self.DATA.num_classes,
-                        y_sampler="totally_random",
+                        y_sampler=iter(self.train_dataloader) if self.RUN.pose else "totally_random",
                         radius=self.LOSS.radius,
                         generator=self.Gen,
                         discriminator=self.Dis,
@@ -778,7 +791,7 @@ class WORKER(object):
                                                                        batch_size=self.OPTIMIZATION.batch_size,
                                                                        z_dim=self.MODEL.z_dim,
                                                                        num_classes=self.DATA.num_classes,
-                                                                       y_sampler="totally_random",
+                                                                       y_sampler=iter(self.eval_dataloader) if self.RUN.pose else "totally_random",
                                                                        radius="N/A",
                                                                        generator=generator,
                                                                        discriminator=self.Dis,
@@ -828,7 +841,7 @@ class WORKER(object):
                                                                    discriminator=self.Dis,
                                                                    eval_model=self.eval_model,
                                                                    num_generate=self.num_eval[self.RUN.ref_dataset],
-                                                                   y_sampler="totally_random",
+                                                                   y_sampler=self.train_dataloader if self.RUN.pose else "totally_random",
                                                                    batch_size=self.OPTIMIZATION.batch_size,
                                                                    z_prior=self.MODEL.z_prior,
                                                                    truncation_factor=self.RUN.truncation_factor,
@@ -842,6 +855,7 @@ class WORKER(object):
                                                                    generator_synthesis=generator_synthesis,
                                                                    world_size=self.OPTIMIZATION.world_size,
                                                                    DDP=self.DDP,
+                                                                   pose=self.RUN.pose,
                                                                    device=self.local_rank,
                                                                    logger=self.logger,
                                                                    disable_tqdm=self.global_rank != 0)
@@ -1031,7 +1045,7 @@ class WORKER(object):
                                  discriminator=self.Dis,
                                  is_generate=True,
                                  num_images=num_images,
-                                 y_sampler="totally_random",
+                                 y_sampler=iter(self.train_dataloader) if self.RUN.pose else "totally_random",
                                  batch_size=self.OPTIMIZATION.batch_size,
                                  z_prior=self.MODEL.z_prior,
                                  truncation_factor=self.RUN.truncation_factor,
@@ -1075,12 +1089,22 @@ class WORKER(object):
             resnet50_conv.eval()
 
             for c in tqdm(range(self.DATA.num_classes)):
+                num_samples, target_sampler = sample.make_target_cls_sampler(dataset=dataset, target_class=c)
+                batch_size = self.OPTIMIZATION.batch_size if num_samples >= self.OPTIMIZATION.batch_size else num_samples
+                c_dataloader = torch.utils.data.DataLoader(dataset=dataset,
+                                                           batch_size=batch_size,
+                                                           shuffle=False,
+                                                           sampler=target_sampler,
+                                                           num_workers=self.RUN.num_workers,
+                                                           pin_memory=True)
+                c_iter = iter(c_dataloader)
+
                 fake_images, fake_labels, _, _, _, _, _ = sample.generate_images(z_prior=self.MODEL.z_prior,
                                                                         truncation_factor=self.RUN.truncation_factor,
                                                                         batch_size=self.OPTIMIZATION.batch_size,
                                                                         z_dim=self.MODEL.z_dim,
                                                                         num_classes=self.DATA.num_classes,
-                                                                        y_sampler=c,
+                                                                        y_sampler=iter(c_dataloader) if self.RUN.pose else c,
                                                                         radius="N/A",
                                                                         generator=generator,
                                                                         discriminator=self.Dis,
@@ -1100,17 +1124,11 @@ class WORKER(object):
                 fake_anchor = ops.resize_images(fake_anchor, resizer, trsf, mean, std)
                 fake_anchor_embed = torch.squeeze(resnet50_conv(fake_anchor))
 
-                num_samples, target_sampler = sample.make_target_cls_sampler(dataset=dataset, target_class=c)
-                batch_size = self.OPTIMIZATION.batch_size if num_samples >= self.OPTIMIZATION.batch_size else num_samples
-                c_dataloader = torch.utils.data.DataLoader(dataset=dataset,
-                                                           batch_size=batch_size,
-                                                           shuffle=False,
-                                                           sampler=target_sampler,
-                                                           num_workers=self.RUN.num_workers,
-                                                           pin_memory=True)
-                c_iter = iter(c_dataloader)
-                for batch_idx in range(num_samples//batch_size):
-                    real_images, real_labels = next(c_iter)
+                for batch_idx in range(num_samples//batch_size):                    
+                    if self.RUN.pose:
+                        real_images, real_labels, real_poses = next(c_iter)
+                    else:
+                        real_images, real_labels = next(c_iter)
                     real_images = ops.quantize_images(real_images)
                     real_images = ops.resize_images(real_images, resizer, trsf, mean, std)
                     real_embed = torch.squeeze(resnet50_conv(real_images))
@@ -1216,13 +1234,16 @@ class WORKER(object):
             data_iter = iter(dataloader)
             num_batches = len(dataloader) // self.OPTIMIZATION.batch_size
             for i in range(num_batches):
-                real_images, real_labels = next(data_iter)
+                if self.RUN.pose:
+                    real_images, real_labels, real_poses = next(data_iter)
+                else:
+                    real_images, real_labels = next(data_iter)
                 fake_images, fake_labels, _, _, _, _, _ = sample.generate_images(z_prior=self.MODEL.z_prior,
                                                                           truncation_factor=self.RUN.truncation_factor,
                                                                           batch_size=self.OPTIMIZATION.batch_size,
                                                                           z_dim=self.MODEL.z_dim,
                                                                           num_classes=self.DATA.num_classes,
-                                                                          y_sampler="totally_random",
+                                                                          y_sampler=iter(self.eval_dataloader) if self.RUN.pose else "totally_random",
                                                                           radius="N/A",
                                                                           generator=generator,
                                                                           discriminator=self.Dis,
@@ -1301,7 +1322,10 @@ class WORKER(object):
             tsne_iter = iter(dataloader)
             num_batches = len(dataloader.dataset) // self.OPTIMIZATION.batch_size
             for i in range(num_batches):
-                real_images, real_labels = next(tsne_iter)
+                if self.RUN.pose:
+                    real_images, real_labels, real_poses = next(tsne_iter)
+                else:
+                    real_images, real_labels = next(tsne_iter)
                 real_images, real_labels = real_images.to(self.local_rank), real_labels.to(self.local_rank)
 
                 real_dict = self.Dis(real_images, real_labels)
@@ -1320,7 +1344,7 @@ class WORKER(object):
                                                                            batch_size=self.OPTIMIZATION.batch_size,
                                                                            z_dim=self.MODEL.z_dim,
                                                                            num_classes=self.DATA.num_classes,
-                                                                           y_sampler="totally_random",
+                                                                           y_sampler=iter(self.eval_dataloader) if self.RUN.pose else "totally_random",
                                                                            radius="N/A",
                                                                            generator=generator,
                                                                            discriminator=self.Dis,
@@ -1416,7 +1440,7 @@ class WORKER(object):
                                                     discriminator=self.Dis,
                                                     eval_model=self.eval_model,
                                                     num_generate=num_samples,
-                                                    y_sampler=c,
+                                                    y_sampler=iter(self.train_dataloader) if self.RUN.pose else c,
                                                     batch_size=self.OPTIMIZATION.batch_size,
                                                     z_prior=self.MODEL.z_prior,
                                                     truncation_factor=self.RUN.truncation_factor,
@@ -1482,7 +1506,7 @@ class WORKER(object):
                                                   z_dim=self.MODEL.z_dim,
                                                   num_classes=self.DATA.num_classes,
                                                   truncation_factor=self.RUN.truncation_factor,
-                                                  y_sampler="totally_random",
+                                                  y_sampler=iter(self.train_dataloader) if self.RUN.pose else "totally_random",
                                                   radius="N/A",
                                                   device=self.local_rank)
 
@@ -1569,7 +1593,7 @@ class WORKER(object):
                                                                      batch_size=self.OPTIMIZATION.batch_size,
                                                                      z_dim=self.MODEL.z_dim,
                                                                      num_classes=self.DATA.num_classes,
-                                                                     y_sampler="totally_random",
+                                                                     y_sampler=iter(self.eval_dataloader) if self.RUN.pose else "totally_random",
                                                                      radius="N/A",
                                                                      generator=generator,
                                                                      discriminator=self.Dis,
@@ -1633,7 +1657,7 @@ class WORKER(object):
                                                                  batch_size=self.OPTIMIZATION.batch_size,
                                                                  z_dim=self.MODEL.z_dim,
                                                                  num_classes=self.DATA.num_classes,
-                                                                 y_sampler="totally_random",
+                                                                 y_sampler=iter(self.eval_dataloader) if self.RUN.pose else "totally_random",
                                                                  radius="N/A",
                                                                  generator=generator,
                                                                  discriminator=self.Dis,

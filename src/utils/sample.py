@@ -55,6 +55,11 @@ def sample_y(y_sampler, batch_size, num_classes, device):
 
     elif isinstance(y_sampler, int):
         y_fake = torch.tensor([y_sampler] * batch_size, dtype=torch.long).to(device)
+    elif hasattr(y_sampler, '__next__'):
+        _, fake_label, fake_pose = next(y_sampler)
+        fake_label = torch.split(fake_label, batch_size)[0].to(device)
+        fake_pose = torch.split(fake_pose, batch_size)[0].to(device)
+        y_fake = [fake_label, fake_pose]
     else:
         y_fake = None
 
@@ -118,6 +123,7 @@ def generate_images(z_prior, truncation_factor, batch_size, z_dim, num_classes, 
         zs = torch.cat((zs, info_conti_c), dim=1)
 
     trsp_cost = None
+
     if LOSS.apply_lo:
         zs, trsp_cost = losses.latent_optimise(zs=zs,
                                                fake_labels=fake_labels,
@@ -155,7 +161,10 @@ def generate_images(z_prior, truncation_factor, batch_size, z_dim, num_classes, 
                                                    truncation_psi=truncation_factor,
                                                    truncation_cutoff=RUN.truncation_cutoff)
     else:
-        fake_images = generator(zs, fake_labels, eval=not is_train)
+        if hasattr(y_sampler, '__next__'):
+            fake_images = generator(zs, fake_labels[1], eval=not is_train)
+        else:
+            fake_images = generator(zs, fake_labels, eval=not is_train)
         ws = None
 
     if zs_eps is not None:
@@ -170,9 +179,19 @@ def generate_images(z_prior, truncation_factor, batch_size, z_dim, num_classes, 
                                                                truncation_psi=truncation_factor,
                                                                truncation_cutoff=RUN.truncation_cutoff)
         else:
-            _, fake_images_eps = generator(zs_eps, fake_labels, eval=not is_train)
+            if hasattr(y_sampler, '__next__'):
+                _, fake_images_eps = generator(zs_eps, fake_labels[1], eval=not is_train)
+            else:
+                _, fake_images_eps = generator(zs_eps, fake_labels, eval=not is_train)
     else:
         fake_images_eps = None
+
+    if hasattr(y_sampler, '__next__'):
+        if MODEL.d_cond_mtd == 'CAT':
+            fake_labels = fake_labels[1]
+        else:
+            fake_labels = fake_labels[0]            
+
     return fake_images, fake_labels, fake_images_eps, trsp_cost, ws, info_discrete_c, info_conti_c
 
 def stylegan_generate_images(zs, fake_labels, num_classes, style_mixing_p, update_emas, 

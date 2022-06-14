@@ -104,6 +104,9 @@ def load_configs_initialize_training():
     parser.add_argument('--eval_backbone', type=str, default='Inception_V3', help="[SwAV, Inception_V3]")
     parser.add_argument("-ref", "--ref_dataset", type=str, default="train", help="reference dataset for evaluation[train/valid/test]")
     parser.add_argument("--is_ref_dataset", action="store_true", help="whether to calculate a inception score of the ref dataset.")
+
+    parser.add_argument("--pose", action="store_true", help="use poses to aid training.")
+
     args = parser.parse_args()
     run_cfgs = vars(args)
 
@@ -161,7 +164,6 @@ def load_configs_initialize_training():
     if cfgs.OPTIMIZATION.world_size == 1:
         print("You have chosen a specific GPU. This will completely disable data parallelism.")
     return cfgs, gpus_per_node, run_name, hdf5_path, rank
-
 
 if __name__ == "__main__":
     cfgs, gpus_per_node, run_name, hdf5_path, rank = load_configs_initialize_training()

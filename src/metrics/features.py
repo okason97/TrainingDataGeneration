@@ -15,7 +15,7 @@ import utils.losses as losses
 
 def generate_images_and_stack_features(generator, discriminator, eval_model, num_generate, y_sampler, batch_size, z_prior,
                                        truncation_factor, z_dim, num_classes, LOSS, RUN, MODEL, is_stylegan, generator_mapping,
-                                       generator_synthesis, world_size, DDP, device, logger, disable_tqdm):
+                                       generator_synthesis, world_size, DDP, pose, device, logger, disable_tqdm):
     eval_model.eval()
     feature_holder, prob_holder, fake_label_holder = [], [], []
 
@@ -29,7 +29,7 @@ def generate_images_and_stack_features(generator, discriminator, eval_model, num
                                                                    batch_size=batch_size,
                                                                    z_dim=z_dim,
                                                                    num_classes=num_classes,
-                                                                   y_sampler=y_sampler,
+                                                                   y_sampler=iter(y_sampler) if pose else y_sampler,
                                                                    radius="N/A",
                                                                    generator=generator,
                                                                    discriminator=discriminator,

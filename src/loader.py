@@ -118,7 +118,8 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                  random_flip=cfgs.PRE.apply_rflip,
                                  normalize=True,
                                  hdf5_path=hdf5_path,
-                                 load_data_in_memory=cfgs.RUN.load_data_in_memory)
+                                 load_data_in_memory=cfgs.RUN.load_data_in_memory,
+                                 pose=cfgs.RUN.pose)
         if local_rank == 0:
             logger.info("Train dataset size: {dataset_size}".format(dataset_size=len(train_dataset)))
     else:
@@ -136,7 +137,8 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                 random_flip=False,
                                 hdf5_path=None,
                                 normalize=True,
-                                load_data_in_memory=False)
+                                load_data_in_memory=False,
+                                pose=cfgs.RUN.pose)
         if local_rank == 0:
             logger.info("Eval dataset size: {dataset_size}".format(dataset_size=len(eval_dataset)))
     else:
@@ -220,6 +222,7 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
     # -----------------------------------------------------------------------------
     if cfgs.RUN.ckpt_dir is not None:
         if local_rank == 0:
+            logger.handlers[0].close()
             os.remove(join(cfgs.RUN.save_dir, "logs", run_name + ".log"))
         run_name, step, epoch, topk, aa_p, best_step, best_fid, best_ckpt_path, logger =\
             ckpt.load_StudioGAN_ckpts(ckpt_dir=cfgs.RUN.ckpt_dir,

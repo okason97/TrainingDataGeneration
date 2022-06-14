@@ -100,6 +100,7 @@ def prepare_moments(data_loader, eval_model, quantize, cfgs, logger, device):
                                           quantize=quantize,
                                           world_size=cfgs.OPTIMIZATION.world_size,
                                           DDP=cfgs.RUN.distributed_data_parallel,
+                                          pose=cfgs.RUN.pose,
                                           disable_tqdm=disable_tqdm,
                                           fake_feats=None)
 
@@ -121,6 +122,7 @@ def calculate_ins(data_loader, eval_model, quantize, splits, cfgs, logger, devic
                                         batch_size=cfgs.OPTIMIZATION.batch_size,
                                         world_size=cfgs.OPTIMIZATION.world_size,
                                         DDP=cfgs.RUN.distributed_data_parallel,
+                                        pose=cfgs.RUN.pose,
                                         disable_tqdm=disable_tqdm)
     if device == 0:
         logger.info("Inception score={is_score}-Inception_std={is_std}".format(is_score=is_score, is_std=is_std))

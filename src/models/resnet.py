@@ -21,7 +21,7 @@ class GenBlock(nn.Module):
         if self.g_cond_mtd == "W/O" and self.g_info_injection in ["N/A", "concat"]:
             self.bn1 = MODULES.g_bn(in_features=in_channels)
             self.bn2 = MODULES.g_bn(in_features=out_channels)
-        elif self.g_cond_mtd == "cBN" or self.g_info_injection == "cBN":
+        elif self.g_cond_mtd == "cBN" or self.g_info_injection == "cBN" or self.g_cond_mtd == "SPADE":
             self.bn1 = MODULES.g_bn(affine_input_dim, in_channels, MODULES)
             self.bn2 = MODULES.g_bn(affine_input_dim, out_channels, MODULES)
         else:
@@ -36,7 +36,7 @@ class GenBlock(nn.Module):
         x0 = x
         if self.g_cond_mtd == "W/O" and self.g_info_injection in ["N/A", "concat"]:
             x = self.bn1(x)
-        elif self.g_cond_mtd == "cBN" or self.g_info_injection == "cBN":
+        elif self.g_cond_mtd == "cBN" or self.g_info_injection == "cBN" or self.g_cond_mtd == "SPADE":
             x = self.bn1(x, affine)
         else:
             raise NotImplementedError
@@ -46,7 +46,7 @@ class GenBlock(nn.Module):
 
         if self.g_cond_mtd == "W/O" and self.g_info_injection in ["N/A", "concat"]:
             x = self.bn2(x)
-        elif self.g_cond_mtd == "cBN" or self.g_info_injection == "cBN":
+        elif self.g_cond_mtd == "cBN" or self.g_info_injection == "cBN" or self.g_cond_mtd == "SPADE":
             x = self.bn2(x, affine)
         else:
             raise NotImplementedError
@@ -144,15 +144,17 @@ class Generator(nn.Module):
                 elif self.g_info_injection == "cBN":
                     z, z_info = z[:, :self.z_dim], z[:, self.z_dim:]
                     affine_list.append(self.info_proj_linear(z_info))
-
-            if self.g_cond_mtd != "W/O":
-                if shared_label is None:
-                    shared_label = self.shared(label)
-                affine_list.append(shared_label)
-            if len(affine_list) > 0:
-                affines = torch.cat(affine_list, 1)
+            if self.g_cond_mtd == "SPADE":
+                affines = label
             else:
-                affines = None
+                if self.g_cond_mtd != "W/O":
+                    if shared_label is None:
+                        shared_label = self.shared(label)
+                    affine_list.append(shared_label)
+                if len(affine_list) > 0:
+                    affines = torch.cat(affine_list, 1)
+                else:
+                    affines = None
 
             act = self.linear0(z)
             act = act.view(-1, self.in_dims[0], self.bottom, self.bottom)
@@ -259,12 +261,18 @@ class Discriminator(nn.Module):
     def __init__(self, img_size, d_conv_dim, apply_d_sn, apply_attn, attn_d_loc, d_cond_mtd, aux_cls_type, d_embed_dim, normalize_d_embed,
                  num_classes, d_init, d_depth, mixed_precision, MODULES, MODEL):
         super(Discriminator, self).__init__()
+        self.d_cond_mtd = d_cond_mtd
+        if self.d_cond_mtd == "CAT":
+            keypoints_dim = 21
+        else:
+            keypoints_dim = 0
+
         d_in_dims_collection = {
-            "32": [3] + [d_conv_dim * 2, d_conv_dim * 2, d_conv_dim * 2],
-            "64": [3] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8],
-            "128": [3] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 16],
-            "256": [3] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16],
-            "512": [3] + [d_conv_dim, d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16]
+            "32": [3 + keypoints_dim] + [d_conv_dim * 2, d_conv_dim * 2, d_conv_dim * 2],
+            "64": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8],
+            "128": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 16],
+            "256": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16],
+            "512": [3 + keypoints_dim] + [d_conv_dim, d_conv_dim, d_conv_dim * 2, d_conv_dim * 4, d_conv_dim * 8, d_conv_dim * 8, d_conv_dim * 16]
         }
 
         d_out_dims_collection = {
@@ -284,7 +292,6 @@ class Discriminator(nn.Module):
             "512": [True, True, True, True, True, True, True, False]
         }
 
-        self.d_cond_mtd = d_cond_mtd
         self.aux_cls_type = aux_cls_type
         self.normalize_d_embed = normalize_d_embed
         self.num_classes = num_classes
@@ -367,6 +374,8 @@ class Discriminator(nn.Module):
             mi_embed, mi_proxy, mi_cls_output = None, None, None
             info_discrete_c_logits, info_conti_mu, info_conti_var = None, None, None
             h = x
+            if self.d_cond_mtd == "CAT":
+                h = torch.cat((x, label), 1)
             for index, blocklist in enumerate(self.blocks):
                 for block in blocklist:
                     h = block(h)
@@ -409,7 +418,7 @@ class Discriminator(nn.Module):
             elif self.d_cond_mtd == "MD":
                 idx = torch.LongTensor(range(label.size(0))).to(label.device)
                 adv_output = adv_output[idx, label]
-            elif self.d_cond_mtd in ["W/O", "MH"]:
+            elif self.d_cond_mtd in ["W/O", "MH", "CAT"]:
                 pass
             else:
                 raise NotImplementedError

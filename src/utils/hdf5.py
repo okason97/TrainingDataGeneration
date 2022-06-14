@@ -33,7 +33,7 @@ from data_util import Dataset_
 
 
 def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
-    file_name = "{dataset_name}_{size}_train.hdf5".format(dataset_name=name, size=img_size)
+    file_name = "{dataset_name}_{size}{pose}_train.hdf5".format(dataset_name=name, size=img_size, pose="_pose" if RUN.pose else "")
     file_path = join(data_dir, file_name)
     hdf5_dir = dirname(file_path)
     if not exists(hdf5_dir):
@@ -51,7 +51,8 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                            random_flip=False,
                            normalize=False,
                            hdf5_path=None,
-                           load_data_in_memory=False)
+                           load_data_in_memory=False,
+                           pose=RUN.pose)
 
         dataloader = DataLoader(dataset,
                                 batch_size=500,
@@ -61,33 +62,75 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                                 drop_last=False)
 
         print("Start to load {name} into an HDF5 file with chunk size 500.".format(name=name))
-        for i, (x, y) in enumerate(tqdm(dataloader)):
-            x = np.transpose(x.numpy(), (0, 2, 3, 1))
-            y = y.numpy()
-            if i == 0:
-                with h5.File(file_path, "w") as f:
-                    print("Produce dataset of len {num_dataset}".format(num_dataset=len(dataset)))
-                    imgs_dset = f.create_dataset("imgs",
-                                                 x.shape,
-                                                 dtype="uint8",
-                                                 maxshape=(len(dataset), img_size, img_size, 3),
-                                                 chunks=(500, img_size, img_size, 3),
-                                                 compression=False)
-                    print("Image chunks chosen as {chunk}".format(chunk=str(imgs_dset.chunks)))
-                    imgs_dset[...] = x
+        if RUN.pose:
+            for i, (x, y, p) in enumerate(tqdm(dataloader)):
+                x = np.transpose(x.numpy(), (0, 2, 3, 1))
+                y = y.numpy()
+                if i == 0:
+                    with h5.File(file_path, "w") as f:
+                        print("Produce dataset of len {num_dataset}".format(num_dataset=len(dataset)))
+                        imgs_dset = f.create_dataset("imgs",
+                                                    x.shape,
+                                                    dtype="uint8",
+                                                    maxshape=(len(dataset), img_size, img_size, 3),
+                                                    chunks=(500, img_size, img_size, 3),
+                                                    compression=False)
+                        print("Image chunks chosen as {chunk}".format(chunk=str(imgs_dset.chunks)))
+                        imgs_dset[...] = x
 
-                    labels_dset = f.create_dataset("labels",
-                                                   y.shape,
-                                                   dtype="int64",
-                                                   maxshape=(len(dataloader.dataset), ),
-                                                   chunks=(500, ),
-                                                   compression=False)
-                    print("Label chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
-                    labels_dset[...] = y
-            else:
-                with h5.File(file_path, "a") as f:
-                    f["imgs"].resize(f["imgs"].shape[0] + x.shape[0], axis=0)
-                    f["imgs"][-x.shape[0]:] = x
-                    f["labels"].resize(f["labels"].shape[0] + y.shape[0], axis=0)
-                    f["labels"][-y.shape[0]:] = y
+                        labels_dset = f.create_dataset("labels",
+                                                    y.shape,
+                                                    dtype="int64",
+                                                    maxshape=(len(dataloader.dataset), ),
+                                                    chunks=(500, ),
+                                                    compression=False)
+                        print("Label chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
+                        labels_dset[...] = y
+
+                        poses_dset = f.create_dataset("poses",
+                                                    p.shape,
+                                                    dtype="float32",
+                                                    maxshape=(len(dataset), 21, img_size, img_size),
+                                                    chunks=(500, 21, img_size, img_size),
+                                                    compression=False)
+                        print("Pose chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
+                        poses_dset[...] = p
+                else:
+                    with h5.File(file_path, "a") as f:
+                        f["imgs"].resize(f["imgs"].shape[0] + x.shape[0], axis=0)
+                        f["imgs"][-x.shape[0]:] = x
+                        f["labels"].resize(f["labels"].shape[0] + y.shape[0], axis=0)
+                        f["labels"][-y.shape[0]:] = y
+                        f["poses"].resize(f["poses"].shape[0] + p.shape[0], axis=0)
+                        f["poses"][-p.shape[0]:] = p
+        else:
+            for i, (x, y) in enumerate(tqdm(dataloader)):
+                x = np.transpose(x.numpy(), (0, 2, 3, 1))
+                y = y.numpy()
+                if i == 0:
+                    with h5.File(file_path, "w") as f:
+                        print("Produce dataset of len {num_dataset}".format(num_dataset=len(dataset)))
+                        imgs_dset = f.create_dataset("imgs",
+                                                    x.shape,
+                                                    dtype="uint8",
+                                                    maxshape=(len(dataset), img_size, img_size, 3),
+                                                    chunks=(500, img_size, img_size, 3),
+                                                    compression=False)
+                        print("Image chunks chosen as {chunk}".format(chunk=str(imgs_dset.chunks)))
+                        imgs_dset[...] = x
+
+                        labels_dset = f.create_dataset("labels",
+                                                    y.shape,
+                                                    dtype="int64",
+                                                    maxshape=(len(dataloader.dataset), ),
+                                                    chunks=(500, ),
+                                                    compression=False)
+                        print("Label chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
+                        labels_dset[...] = y
+                else:
+                    with h5.File(file_path, "a") as f:
+                        f["imgs"].resize(f["imgs"].shape[0] + x.shape[0], axis=0)
+                        f["imgs"][-x.shape[0]:] = x
+                        f["labels"].resize(f["labels"].shape[0] + y.shape[0], axis=0)
+                        f["labels"][-y.shape[0]:] = y
     return file_path, False, None

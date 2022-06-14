@@ -63,7 +63,7 @@ def frechet_inception_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
 
 
 def calculate_moments(data_loader, eval_model, num_generate, batch_size, quantize, world_size,
-                      DDP, disable_tqdm, fake_feats=None):
+                      DDP, pose, disable_tqdm, fake_feats=None):
     if fake_feats is not None:
         total_instance = num_generate
         acts = fake_feats.detach().cpu().numpy()[:num_generate]
@@ -78,7 +78,10 @@ def calculate_moments(data_loader, eval_model, num_generate, batch_size, quantiz
             start = i * batch_size
             end = start + batch_size
             try:
-                images, labels = next(data_iter)
+                if pose:
+                    images, labels, poses = next(data_iter)
+                else:
+                    images, labels = next(data_iter)
             except StopIteration:
                 break
 
@@ -116,6 +119,7 @@ def calculate_fid(data_loader,
                                    quantize=quantize,
                                    world_size=cfgs.OPTIMIZATION.world_size,
                                    DDP=cfgs.RUN.distributed_data_parallel,
+                                   pose=cfgs.RUN.pose,
                                    disable_tqdm=disable_tqdm,
                                    fake_feats=None)
 
@@ -126,6 +130,7 @@ def calculate_fid(data_loader,
                                quantize=quantize,
                                world_size=cfgs.OPTIMIZATION.world_size,
                                DDP=cfgs.RUN.distributed_data_parallel,
+                               pose=cfgs.RUN.pose,
                                disable_tqdm=disable_tqdm,
                                fake_feats=fake_feats)
 

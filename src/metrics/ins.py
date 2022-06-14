@@ -62,7 +62,7 @@ def eval_features(probs, labels, data_loader, num_features, split, is_acc):
     return m_scores, m_std, top1, top5
 
 
-def eval_dataset(data_loader, eval_model, quantize, splits, batch_size, world_size, DDP, disable_tqdm=False):
+def eval_dataset(data_loader, eval_model, quantize, splits, batch_size, world_size, DDP, pose, disable_tqdm=False):
     eval_model.eval()
     num_samples = len(data_loader.dataset)
     num_batches = int(math.ceil(float(num_samples) / float(batch_size)))
@@ -71,7 +71,10 @@ def eval_dataset(data_loader, eval_model, quantize, splits, batch_size, world_si
 
     ps_holder = []
     for i in tqdm(range(num_batches), disable=disable_tqdm):
-        real_images, real_labels = next(dataset_iter)
+        if pose:
+            real_images, real_labels, real_poses = next(dataset_iter)
+        else:
+            real_images, real_labels = next(dataset_iter)
         with torch.no_grad():
             ps = inception_softmax(eval_model, real_images, quantize)
             ps_holder.append(ps)
