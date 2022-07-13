@@ -26,6 +26,7 @@ import torch.nn as nn
 import torch.distributed as dist
 import torch.nn.functional as F
 import numpy as np
+from itertools import cycle
 
 import metrics.features as features
 import metrics.ins as ins
@@ -1040,12 +1041,12 @@ class WORKER(object):
             misc.make_GAN_untrainable(self.Gen, self.Gen_ema, self.Dis)
             generator, generator_mapping, generator_synthesis = self.gen_ctlr.prepare_generator()
 
-            misc.save_images_png(data_loader=self.eval_dataloader,
+            misc.save_images_png(data_loader=self.train_dataloader,
                                  generator=generator,
                                  discriminator=self.Dis,
                                  is_generate=True,
                                  num_images=num_images,
-                                 y_sampler=iter(self.train_dataloader) if self.RUN.pose else "totally_random",
+                                 y_sampler=cycle(self.train_dataloader) if self.RUN.pose else "totally_random",
                                  batch_size=self.OPTIMIZATION.batch_size,
                                  z_prior=self.MODEL.z_prior,
                                  truncation_factor=self.RUN.truncation_factor,

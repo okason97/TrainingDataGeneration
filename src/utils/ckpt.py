@@ -12,10 +12,6 @@ import torch
 import numpy as np
 
 import utils.log as log
-try:
-    import utils.misc as misc
-except AttributeError:
-    pass
 
 blacklist = ["CCMGAN2048-train-2021_06_22_06_11_37"]
 
@@ -27,6 +23,7 @@ def make_ckpt_dir(ckpt_dir):
 
 
 def load_ckpt(model, optimizer, ckpt_path, load_model=False, load_opt=False, load_misc=False, is_freezeD=False):
+    import utils.misc as misc
     ckpt = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
     if load_model:
         if is_freezeD:
@@ -72,6 +69,7 @@ def load_ckpt(model, optimizer, ckpt_path, load_model=False, load_opt=False, loa
 
 def load_StudioGAN_ckpts(ckpt_dir, load_best, Gen, Dis, g_optimizer, d_optimizer, run_name, apply_g_ema, Gen_ema, ema,
                          is_train, RUN, logger, global_rank, device, cfg_file):
+    import utils.misc as misc
     when = "best" if load_best is True else "current"
     Gen_ckpt_path = glob.glob(join(ckpt_dir, "model=G-{when}-weights-step*.pth".format(when=when)))[0]
     Dis_ckpt_path = glob.glob(join(ckpt_dir, "model=D-{when}-weights-step*.pth".format(when=when)))[0]
@@ -130,6 +128,7 @@ def load_StudioGAN_ckpts(ckpt_dir, load_best, Gen, Dis, g_optimizer, d_optimizer
 
 
 def load_best_model(ckpt_dir, Gen, Dis, apply_g_ema, Gen_ema, ema):
+    import utils.misc as misc
     Gen, Dis, Gen_ema = misc.peel_models(Gen, Dis, Gen_ema)
     Gen_ckpt_path = glob.glob(join(ckpt_dir, "model=G-best-weights-step*.pth"))[0]
     Dis_ckpt_path = glob.glob(join(ckpt_dir, "model=D-best-weights-step*.pth"))[0]

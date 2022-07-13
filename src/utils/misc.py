@@ -516,7 +516,10 @@ def save_images_png(data_loader, generator, discriminator, is_generate, num_imag
                                                                  cal_trsp_cost=False)
             else:
                 try:
-                    images, labels = next(data_iter)
+                    if RUN.pose:
+                        images, labels, _ = next(data_iter)
+                    else:
+                        images, labels = next(data_iter)
                 except StopIteration:
                     break
 

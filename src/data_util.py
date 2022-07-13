@@ -19,6 +19,7 @@ import numpy as np
 import json
 from scipy.stats import multivariate_normal
 import cv2
+from skimage.draw import line_aa
 
 class RandomCropLongEdge(object):
     """
@@ -66,20 +67,36 @@ class PoseFolder(Dataset):
             else:
                 return self.load_keypoints(lh_keypoints, shape)
         else:
-            return torch.zeros((self.n_keypoints, shape[1], shape[0]))
+            return torch.zeros((self.n_keypoints, shape[0], shape[1]))
 
     def load_keypoints(self, keypoints, shape):
-        y, x = np.mgrid[0:shape[1]:1, 0:shape[0]:1]
-        pos = np.dstack((x, y))
-        sample = torch.zeros((self.n_keypoints, shape[1], shape[0]))
-        for i in range(self.n_keypoints):
-            ky = keypoints[i*3]
-            kx = keypoints[i*3+1]
-            # confidence = np.clip(keypoints[i*3+2], 0, 1)
-            # shape[1]-shape[1]*confidence+1 | shape[0]-shape[0]*confidence+1
-            rv = multivariate_normal([ky, kx], [[4, 0.], [0., 4]])
-            sample[i] = torch.tensor(np.copy(rv.pdf(pos))).float()
-        return sample
+        skeleton = False
+        if skeleton:
+            sample = np.zeros((self.n_keypoints-1, shape[0], shape[1]))
+            for i in range(int(self.n_keypoints/5)+1):
+                x0 = int(keypoints[0])
+                y0 = int(keypoints[1])
+                for j in range(1,5):
+                    x1 = int(keypoints[(i*4+j)*3])
+                    y1 = int(keypoints[(i*4+j)*3+1])
+                    rr, cc, val = line_aa(x0, y0, x1, y1)
+                    sample[i*4+j-1, rr, cc] = val
+                    x0 = x1
+                    y0 = y1
+            return torch.tensor(sample)        
+        else:
+            x, y = np.mgrid[0:shape[0]:1, 0:shape[1]:1]
+            pos = np.dstack((x, y))
+            sample = torch.zeros((self.n_keypoints, shape[0], shape[1]))
+            for i in range(self.n_keypoints):
+                kx = keypoints[i*3]
+                ky = keypoints[i*3+1]
+                # confidence = np.clip(keypoints[i*3+2], 0, 1)
+                # shape[1]-shape[1]*confidence+1 | shape[0]-shape[0]*confidence+1
+                rv = multivariate_normal([kx, ky], [[4, 0.], [0., 4]])
+                sample[i] = torch.tensor(np.copy(rv.pdf(pos))).float()
+            return sample
+
 
     def find_classes(self, directory):
         classes = sorted(entry.name for entry in os.scandir(directory) if entry.is_dir())

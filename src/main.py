@@ -106,6 +106,7 @@ def load_configs_initialize_training():
     parser.add_argument("--is_ref_dataset", action="store_true", help="whether to calculate a inception score of the ref dataset.")
 
     parser.add_argument("--pose", action="store_true", help="use poses to aid training.")
+    parser.add_argument("--skeleton", action="store_true", help="use vertices instead of keypoints to aid training.")
 
     args = parser.parse_args()
     run_cfgs = vars(args)

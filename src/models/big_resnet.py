@@ -76,7 +76,7 @@ class Generator(nn.Module):
         self.num_blocks = len(self.in_dims)
         if self.g_cond_mtd == "SPADE":
             self.chunk_size = z_dim
-            self.affine_input_dim = 0
+            self.affine_input_dim = 21
         else:
             self.chunk_size = z_dim // (self.num_blocks + 1)
             self.affine_input_dim = self.chunk_size
@@ -97,7 +97,7 @@ class Generator(nn.Module):
 
         self.linear0 = MODULES.g_linear(in_features=self.chunk_size, out_features=self.in_dims[0]*self.bottom*self.bottom, bias=True)
 
-        if self.g_cond_mtd != "W/O":
+        if self.g_cond_mtd != "W/O" and self.g_cond_mtd != "SPADE":
             self.affine_input_dim += self.g_shared_dim
             self.shared = ops.embedding(num_embeddings=self.num_classes, embedding_dim=self.g_shared_dim)
 
