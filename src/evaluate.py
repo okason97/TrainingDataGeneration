@@ -25,8 +25,6 @@ import metrics.ins as ins
 import metrics.fid as fid
 import metrics.prdc as prdc
 
-
-
 class Dataset_(Dataset):
     def __init__(self, data_dir):
         super(Dataset_, self).__init__()

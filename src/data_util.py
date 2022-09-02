@@ -38,12 +38,13 @@ class RandomCropLongEdge(object):
         return self.__class__.__name__
 
 class PoseFolder(Dataset):
-    def __init__(self, data_dir, shapes, transform = None):
+    def __init__(self, data_dir, shapes, skeleton, transform = None):
         self.data_dir = data_dir
         self.samples = self.make_dataset()
         self.shapes = shapes
         self.transform = transform
-        self.n_keypoints = 21
+        self.skeleton = skeleton
+        self.n_keypoints = 20 if self.skeleton else 21 
 
     def make_dataset(self):    
         instances = []
@@ -70,20 +71,19 @@ class PoseFolder(Dataset):
             return torch.zeros((self.n_keypoints, shape[0], shape[1]))
 
     def load_keypoints(self, keypoints, shape):
-        skeleton = False
-        if skeleton:
-            sample = np.zeros((self.n_keypoints-1, shape[0], shape[1]))
-            for i in range(int(self.n_keypoints/5)+1):
-                x0 = int(keypoints[0])
-                y0 = int(keypoints[1])
+        if self.skeleton:
+            sample = np.zeros((self.n_keypoints, shape[0], shape[1]))
+            for i in range(5):
+                x0 = np.clip(int(keypoints[0]), 0, shape[0]-1)
+                y0 = np.clip(int(keypoints[1]), 0, shape[1]-1)
                 for j in range(1,5):
-                    x1 = int(keypoints[(i*4+j)*3])
-                    y1 = int(keypoints[(i*4+j)*3+1])
+                    x1 = np.clip(int(keypoints[(i*4+j)*3]), 0, shape[0]-1)
+                    y1 = np.clip(int(keypoints[(i*4+j)*3+1]), 0, shape[1]-1)
                     rr, cc, val = line_aa(x0, y0, x1, y1)
                     sample[i*4+j-1, rr, cc] = val
                     x0 = x1
                     y0 = y1
-            return torch.tensor(sample)        
+            return torch.tensor(sample).float()
         else:
             x, y = np.mgrid[0:shape[0]:1, 0:shape[1]:1]
             pos = np.dstack((x, y))
@@ -152,7 +152,8 @@ class Dataset_(Dataset):
                  normalize=True,
                  hdf5_path=None,
                  load_data_in_memory=False,
-                 pose=False):
+                 pose=False,
+                 skeleton=False):
         super(Dataset_, self).__init__()
         self.data_name = data_name
         self.data_dir = data_dir
@@ -162,6 +163,7 @@ class Dataset_(Dataset):
         self.hdf5_path = hdf5_path
         self.load_data_in_memory = load_data_in_memory
         self.pose = pose
+        self.skeleton = skeleton
         self.trsf_list = []
         self.pose_trsf_list = []
 
@@ -217,7 +219,7 @@ class Dataset_(Dataset):
             self.data = ImageFolder(root=root)
             if self.pose:
                 pose_root = os.path.join(self.data_dir, mode+'_poses')
-                self.poses = PoseFolder(pose_root, [(sample[0].size[0], sample[0].size[1]) for sample in self.data])     
+                self.poses = PoseFolder(pose_root, [(sample[0].size[0], sample[0].size[1]) for sample in self.data], self.skeleton)    
 
     def _get_hdf5(self, index):
         with h5.File(self.hdf5_path, "r") as f:

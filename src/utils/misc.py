@@ -30,6 +30,7 @@ import shutil
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 import utils.sample as sample
 import utils.losses as losses
@@ -616,3 +617,21 @@ def enable_allreduce(dict_):
         if value is not None and key != "label":
             loss += value.mean()*0
     return loss
+
+def sigmoid(x):
+    return 1/(1+exp(-x))
+
+def mixup_data(x_a, x_b, alpha=5, beta=5):
+    if alpha > 0 and beta > 0:
+        lam = np.random.beta(alpha, beta)
+    else:
+        lam = 1 
+    mixed_x = lam * x_a + (1 - lam) * x_b
+    return mixed_x, lam
+
+def mixup_criterion(criterion, pred, y_a, y_b, lam):
+    return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
+
+def train_val_dataset(dataset, val_split=0.25, random_state=42):
+    train_idx, val_idx = train_test_split(list(range(len(dataset))), test_size=val_split, random_state=random_state)
+    return Subset(dataset, train_idx), Subset(dataset, val_idx)

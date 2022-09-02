@@ -76,7 +76,8 @@ class Generator(nn.Module):
         self.num_blocks = len(self.in_dims)
         if self.g_cond_mtd == "SPADE":
             self.chunk_size = z_dim
-            self.affine_input_dim = 21
+            skeleton = True
+            self.affine_input_dim = 20 if skeleton else 21
         else:
             self.chunk_size = z_dim // (self.num_blocks + 1)
             self.affine_input_dim = self.chunk_size
@@ -258,7 +259,8 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
         self.d_cond_mtd = d_cond_mtd
         if self.d_cond_mtd == "CAT":
-            keypoints_dim = 21
+            skeleton = True
+            keypoints_dim = 20 if skeleton else 21
         else:
             keypoints_dim = 0
         d_in_dims_collection = {

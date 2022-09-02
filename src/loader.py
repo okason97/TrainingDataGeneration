@@ -119,7 +119,8 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                  normalize=True,
                                  hdf5_path=hdf5_path,
                                  load_data_in_memory=cfgs.RUN.load_data_in_memory,
-                                 pose=cfgs.RUN.pose)
+                                 pose=cfgs.RUN.pose,
+                                 skeleton=cfgs.RUN.skeleton)
         if local_rank == 0:
             logger.info("Train dataset size: {dataset_size}".format(dataset_size=len(train_dataset)))
     else:
@@ -138,7 +139,8 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                 hdf5_path=None,
                                 normalize=True,
                                 load_data_in_memory=False,
-                                pose=cfgs.RUN.pose)
+                                pose=cfgs.RUN.pose,
+                                skeleton=cfgs.RUN.skeleton)
         if local_rank == 0:
             logger.info("Eval dataset size: {dataset_size}".format(dataset_size=len(eval_dataset)))
     else:

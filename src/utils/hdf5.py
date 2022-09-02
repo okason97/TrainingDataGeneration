@@ -52,7 +52,8 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                            normalize=False,
                            hdf5_path=None,
                            load_data_in_memory=False,
-                           pose=RUN.pose)
+                           pose=RUN.pose,
+                           skeleton=RUN.skeleton)
 
         dataloader = DataLoader(dataset,
                                 batch_size=500,
@@ -90,8 +91,8 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                         poses_dset = f.create_dataset("poses",
                                                     p.shape,
                                                     dtype="float32",
-                                                    maxshape=(len(dataset), 21, img_size, img_size),
-                                                    chunks=(500, 21, img_size, img_size),
+                                                    maxshape=(len(dataset), 20 if RUN.skeleton else 21, img_size, img_size),
+                                                    chunks=(500, 20 if RUN.skeleton else 21, img_size, img_size),
                                                     compression=False)
                         print("Pose chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
                         poses_dset[...] = p
