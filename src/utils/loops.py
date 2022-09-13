@@ -1,12 +1,14 @@
 import torch
+import os
 import torch.nn as nn
 import copy
 import numpy as np
 from math import inf
-from torchvision import transforms
 import sys
+import shutil
+from torchvision.utils import save_image
 sys.path.append('./')
-from misc import mixup_data, mixup_criterion, sigmoid
+from utils.misc import mixup_data, mixup_criterion
 
 def train(model, dataloaders, epochs, mode, device):
 
@@ -15,32 +17,28 @@ def train(model, dataloaders, epochs, mode, device):
     # -----------------------------------------------------------------------------
     # mixup parameters used to calculate the beta distribution.   
     # -----------------------------------------------------------------------------
-    alpha = 1.0
-    beta = 1.0
-
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, betas=(0.0, 0.999), eps=1e-6)
-
-    criterion = nn.CrossEntropyLoss()
-
-    best_model_wts = copy.deepcopy(model.state_dict())
-    best_loss = inf
 
     if mode == 'gen':
         gen_dataloader = {'train': dataloaders['gen'],
                           'val': dataloaders['val']}
-        model, _ = train_loop(model, gen_dataloader, epochs, mode, device)
-        epochs = int(epochs/4)
+        model, _, _ = train_loop(model, gen_dataloader, int(epochs/4), mode, device)
 
-    model, results = train_loop(model, dataloaders, epochs, mode, device)
+    model, results, best_model_wts = train_loop(model, dataloaders, epochs, mode, device)
 
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model, results
 
 def train_loop(model, dataloaders, epochs, mode, device):
-    confidence_alpha = -3.
-    confidence_beta = 0.5
-    confidence_max = 1.
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, betas=(0.0, 0.999), eps=1e-6)
+
+    criterion = nn.CrossEntropyLoss()
+
+    alpha = 1.0
+    beta = 1.0
+
+    best_model_wts = copy.deepcopy(model.state_dict())
+    best_loss = inf
 
     results = {
         'train': {
@@ -55,7 +53,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
 
     for epoch in range(epochs):
         print('##############################')
-        print('#{} epoch: {}'.format(name, epoch))
+        print('#epoch: {}'.format(epoch))
 
         for phase in ['train', 'val']:
             if phase == 'train':
@@ -73,6 +71,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
                         inputs_g, labels_g = next(iter(dataloaders['gen']))
                         idx = torch.randperm(inputs.shape[0])
                         inputs_g, lam_g = mixup_data(inputs_g[idx], inputs_g, alpha, beta)
+                        inputs_g = inputs_g.to(device)
                         labels_ga = labels_g[idx].to(device)
                         labels_gb = labels_g.to(device)
                     if mode == 'mixgen':
@@ -85,8 +84,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
                         inputs, lam = mixup_data(inputs[idx], inputs, alpha, beta)
                         labels_a = labels[idx].to(device)
                         labels_b = labels.to(device)
-                else:
-                    inputs = inputs.to(device)                    
+                inputs = inputs.to(device)                    
                 labels = labels.to(device)
 
                 # zero the parameter gradients
@@ -132,6 +130,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
             if phase == 'val' and epoch_loss < best_loss:
                 best_loss = epoch_loss
                 best_model_wts = copy.deepcopy(model.state_dict())
+    return model, results, best_model_wts
 
 def test(model, dataloaders, device = 'cuda'):
 
@@ -172,3 +171,49 @@ def test(model, dataloaders, device = 'cuda'):
         'Test', results['test']['loss'], results['test']['acc']))
 
     return results
+
+def filter(model, dataloaders, top_k, n_classes, save_dir, device = 'cuda'):
+
+    print("Filtering best samples")
+
+    model.eval()   # Set model to evaluate mode
+
+    filtered =  np.zeros((n_classes, 2, top_k))
+
+    cur_index = np.zeros(n_classes, dtype=np.int32)
+
+    if os.path.exists(save_dir):
+        shutil.rmtree(save_dir)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    for f in range(n_classes):
+        if not os.path.exists(os.path.join(save_dir, str(f))):
+            os.makedirs(os.path.join(save_dir, str(f)))
+
+    # Iterate over data.
+    for inputs, labels, indices in dataloaders['gen']:
+        inputs = inputs.float().to(device)
+        labels = labels.to(device)
+        indices = indices.to(device)
+
+        # forward
+        outputs = model(inputs)
+
+        for i in range(len(outputs)):
+            score = outputs[i][labels[i]]
+            if cur_index[labels[i]] < top_k:
+                filtered[labels[i], 0, cur_index[labels[i]]] = score
+                filtered[labels[i], 1, cur_index[labels[i]]] = indices[i]
+                cur_index[labels[i]] += 1
+            else:
+                min_index = np.argmin(filtered[labels[i],0])
+                if score < filtered[labels[i], 0, min_index]:
+                    filtered[labels[i], 0, min_index] = score
+                    filtered[labels[i], 1, min_index] = indices[i]
+
+    for i in range(n_classes):
+        print('##############################')
+        print('#class: {}'.format(i))
+        print('Min score: {:.4f}, Max score: {:.4f}'.format(np.min(filtered[i, 0]), np.max(filtered[i, 0])))
+        for j in range(top_k):
+            save_image(dataloaders['gen'].dataset[int(filtered[i, 1, j])][0].float()/255, os.path.join(save_dir, str(i), "{idx}.png".format(idx=j)))

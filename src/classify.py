@@ -1,15 +1,19 @@
+from argparse import ArgumentParser
 from torchvision import transforms
+from torch.utils.data import DataLoader
 import torchvision.models as models
 import torch.nn as nn
+from torch.backends import cudnn
+import torch
+import random
 import numpy as np
 import os
 import pickle
 import sys
 sys.path.append('./')
-from datasets.generated import load_data as load_generated_data
-from datasets.rwth import load_data
-from utils.loops import train, test
-from utils.misc import train_val_dataset
+from utils.loops import train, test, filter
+import utils.misc as misc
+from data_util import Dataset_
 
 def prepare_evaluation():
     parser = ArgumentParser(add_help=True)
@@ -20,6 +24,9 @@ def prepare_evaluation():
     parser.add_argument("--dims", default=64, type=int, help="image dimensions sizes")
     parser.add_argument("--epochs", default=50, type=int, help="number of epochs")
     parser.add_argument("-save", "--save_dir", type=str, default="./")
+    parser.add_argument("-sm", "--save_model", action="store_true")
+    parser.add_argument("-lm", "--load_model", type=str, default=None)
+    parser.add_argument("--top_k", default=-1, type=int)
 
     parser.add_argument("--seed", type=int, default=-1, help="seed for generating random numbers")
     parser.add_argument("-DDP", "--distributed_data_parallel", action="store_true")
@@ -66,7 +73,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                            data_dir=args.dset1,
                            train=True,
                            crop_long_edge=True,
-                           resize_size=[args.dim, args.dim],
+                           resize_size=[args.dims, args.dims],
                            random_flip=True,
                            normalize=True,
                            hdf5_path=None,
@@ -76,64 +83,69 @@ def classify(local_rank, args, world_size, gpus_per_node):
                            data_dir=args.dset1,
                            train=False,
                            crop_long_edge=True,
-                           resize_size=[args.dim, args.dim],
+                           resize_size=[args.dims, args.dims],
                            random_flip=True,
                            normalize=True,
                            hdf5_path=None,
                            load_data_in_memory=True,
                            pose=False)
-    gen_dataset = Dataset_(data_name='rwth-gen-spade',
-                           data_dir=args.dset2,
-                           train=True,
-                           crop_long_edge=True,
-                           resize_size=[args.dim, args.dim],
-                           random_flip=True,
-                           normalize=True,
-                           hdf5_path=None,
-                           load_data_in_memory=True,
-                           pose=False)
-    train_dataset, val_dataset = train_val_dataset(dataset = train_dataset, random_state = args.seed)
+    if args.dset2 != 'none':
+        gen_dataset = Dataset_(data_name='rwth-gen-spade',
+                               data_dir=args.dset2,
+                               train=True,
+                               crop_long_edge=True,
+                               resize_size=[args.dims, args.dims],
+                               random_flip=True,
+                               normalize=True,
+                               hdf5_path=None,
+                               load_data_in_memory=True,
+                               pose=False)
+    train_dataset, val_dataset = misc.train_val_dataset(dataset = train_dataset, random_state = args.seed)
     if local_rank == 0:
         print("Size of train dataset: {dataset_size}".format(dataset_size=len(train_dataset)))
         print("Size of validation dataset: {dataset_size}".format(dataset_size=len(val_dataset)))
         print("Size of test dataset: {dataset_size}".format(dataset_size=len(test_dataset)))
-        print("Size of generated dataset: {dataset_size}".format(dataset_size=len(gen_dataset)))
+        if args.dset2 != 'none':
+            print("Size of generated dataset: {dataset_size}".format(dataset_size=len(gen_dataset)))
 
     # -----------------------------------------------------------------------------
     # define dataloaders for real and generated datasets.
     # -----------------------------------------------------------------------------
     train_dataloader = DataLoader(dataset=train_dataset,
-                                batch_size=batch_size,
+                                batch_size=args.batch_size,
                                 shuffle=True,
                                 pin_memory=True,
-                                num_workers=num_workers,
+                                num_workers=args.num_workers,
                                 sampler=None,
                                 drop_last=True,
                                 persistent_workers=True)
     val_dataloader = DataLoader(dataset=val_dataset,
-                                batch_size=batch_size,
+                                batch_size=args.batch_size,
                                 shuffle=True,
                                 pin_memory=True,
-                                num_workers=num_workers,
+                                num_workers=args.num_workers,
                                 sampler=None,
                                 drop_last=True,
                                 persistent_workers=True) 
     test_dataloader = DataLoader(dataset=test_dataset,
-                                batch_size=batch_size,
+                                batch_size=args.batch_size,
                                 shuffle=True,
                                 pin_memory=True,
-                                num_workers=num_workers,
+                                num_workers=args.num_workers,
                                 sampler=None,
                                 drop_last=True,
                                 persistent_workers=True) 
-    gen_dataloader = DataLoader(dataset=gen_dataset,
-                                batch_size=batch_size,
-                                shuffle=True,
-                                pin_memory=True,
-                                num_workers=num_workers,
-                                sampler=None,
-                                drop_last=True,
-                                persistent_workers=True)
+    if args.dset2 != 'none':
+        gen_dataloader = DataLoader(dataset=gen_dataset,
+                                    batch_size=args.batch_size,
+                                    shuffle=True,
+                                    pin_memory=True,
+                                    num_workers=args.num_workers,
+                                    sampler=None,
+                                    drop_last=True,
+                                    persistent_workers=True)
+    else:
+        gen_dataloader = None
     dataloaders = {'train': train_dataloader,
                     'val': val_dataloader,
                     'test': test_dataloader,
@@ -142,18 +154,26 @@ def classify(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     # load a network (Efficientnet v2).
     # -----------------------------------------------------------------------------
-    model = models.efficientnet_v2_m(pretrained=False)
-    num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, train_dataset.classes)
-    model = model.to(device)
+    n_classes = 39
+    weights = models.EfficientNet_V2_M_Weights.IMAGENET1K_V1
+    model = models.efficientnet_v2_m(weights=weights)
+    num_ftrs = model.classifier[1].in_features
+    model.fc = nn.Linear(num_ftrs, n_classes)
+    model = model.to(local_rank)
 
     # -----------------------------------------------------------------------------
     # train the model.
     # -----------------------------------------------------------------------------
-    model, train_results = train(model, dataloaders, epochs = args.epochs, mode = train_mode, device = local_rank)
-    if not args.save_dir is None:
-        with open(args.save_dir+'train_results{}.pkl'.format(i), 'wb') as f:
-            pickle.dump(train_results, f)
+    if args.load_model:
+        model.load_state_dict(torch.load(args.load_model))
+        model.eval()
+    else:
+        model, train_results = train(model, dataloaders, epochs = args.epochs, mode = args.train_mode, device = local_rank)
+        if not args.save_dir is None:
+            with open(args.save_dir+'train_results.pkl', 'wb') as f:
+                pickle.dump(train_results, f)
+        if args.save_model:
+            torch.save(model.state_dict(), args.save_dir+'model_state_dict.pt')
 
     # -----------------------------------------------------------------------------
     # test the model.
@@ -162,6 +182,35 @@ def classify(local_rank, args, world_size, gpus_per_node):
     if not args.save_dir is None:
         with open(args.save_dir+'test_results.pkl', 'wb') as f:
             pickle.dump(test_results, f)
+
+    # -----------------------------------------------------------------------------
+    # filter the top K generated samples.
+    # -----------------------------------------------------------------------------
+    if args.top_k>0:
+        if args.dset2 != 'none':
+            gen_dataset = misc.dataset_with_indices(Dataset_)(data_name='rwth-gen-spade',
+                                data_dir=args.dset2,
+                                train=True,
+                                crop_long_edge=True,
+                                resize_size=[args.dims, args.dims],
+                                random_flip=False,
+                                normalize=False,
+                                hdf5_path=None,
+                                load_data_in_memory=True,
+                                pose=False)
+
+            gen_dataloader = DataLoader(dataset=gen_dataset,
+                                        batch_size=args.batch_size,
+                                        shuffle=False,
+                                        pin_memory=True,
+                                        num_workers=args.num_workers,
+                                        sampler=None,
+                                        drop_last=True,
+                                        persistent_workers=True)
+            dataloaders = {'gen': gen_dataloader}
+            filter(model, dataloaders, top_k = args.top_k, n_classes = n_classes, save_dir = os.path.join(args.save_dir,os.path.basename(os.path.normpath(args.dset2)),'train'), device = local_rank)
+        else:
+            print('No dataset to filter.')
 
 if __name__ == "__main__":
     args, world_size, gpus_per_node, rank = prepare_evaluation()

@@ -18,6 +18,7 @@ from torch.nn import DataParallel
 from torchvision.datasets import CIFAR10, CIFAR100
 from torch.nn.parallel import DistributedDataParallel
 from torchvision.utils import save_image
+from torch.utils.data import Subset
 from itertools import chain
 from tqdm import tqdm
 from scipy import linalg
@@ -472,7 +473,7 @@ def plot_tsne_scatter_plot(df, tsne_results, flag, directory, logger, logging=Tr
 
 def save_images_png(data_loader, generator, discriminator, is_generate, num_images, y_sampler, batch_size, z_prior,
                     truncation_factor, z_dim, num_classes, LOSS, OPTIMIZATION, RUN, MODEL, is_stylegan, generator_mapping,
-                    generator_synthesis, directory, device):
+                    generator_synthesis, directory, directory_clean, device):
     num_batches = math.ceil(float(num_images) / float(batch_size))
     if RUN.distributed_data_parallel: num_batches = num_batches//OPTIMIZATION.world_size + 1
     if is_generate:
@@ -484,11 +485,14 @@ def save_images_png(data_loader, generator, discriminator, is_generate, num_imag
     print("Save {num_images} {image_type} images in png format.".format(num_images=num_images, image_type=image_type))
 
     directory = join(directory, image_type)
-    if exists(directory):
-        shutil.rmtree(directory)
-    os.makedirs(directory)
+    if directory_clean:
+        if exists(directory):
+            shutil.rmtree(directory)
+    if not exists(directory):
+        os.makedirs(directory)
     for f in range(num_classes):
-        os.makedirs(join(directory, str(f)))
+        if not exists(join(directory, str(f))):
+            os.makedirs(join(directory, str(f)))
 
     with torch.no_grad() if not LOSS.apply_lo else dummy_context_mgr() as mpc:
         for i in tqdm(range(0, num_batches), disable=False):
@@ -635,3 +639,12 @@ def mixup_criterion(criterion, pred, y_a, y_b, lam):
 def train_val_dataset(dataset, val_split=0.25, random_state=42):
     train_idx, val_idx = train_test_split(list(range(len(dataset))), test_size=val_split, random_state=random_state)
     return Subset(dataset, train_idx), Subset(dataset, val_idx)
+
+def dataset_with_indices(cls):
+    def __getitem__(self, index):
+        data, target = cls.__getitem__(self, index)
+        return data, target, index
+
+    return type(cls.__name__, (cls,), {
+        '__getitem__': __getitem__,
+    })
