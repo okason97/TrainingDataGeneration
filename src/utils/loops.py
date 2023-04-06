@@ -6,9 +6,13 @@ import numpy as np
 from math import inf
 import sys
 import shutil
+import pickle
 from torchvision.utils import save_image
 sys.path.append('./')
 from utils.misc import mixup_data, mixup_criterion
+from sklearn.metrics import confusion_matrix
+import seaborn as sn
+import matplotlib.pyplot as plt
 
 def train(model, dataloaders, epochs, mode, device):
 
@@ -34,8 +38,8 @@ def train_loop(model, dataloaders, epochs, mode, device):
 
     criterion = nn.CrossEntropyLoss()
 
-    alpha = 1.0
-    beta = 1.0
+    alpha = 5.0
+    beta = 5.0
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_loss = inf
@@ -101,7 +105,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
                         loss = mixup_criterion(criterion, outputs, labels_a, labels_b, lam)
                         if mode == 'reggen':
                             loss_g = mixup_criterion(criterion, outputs_g, labels_ga, labels_gb, lam_g)
-                            loss = loss + (1-epoch/epochs)*loss_g
+                            loss = loss + loss_g
                     else:
                         loss = criterion(outputs, labels)
 
@@ -118,7 +122,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
                     running_corrects += torch.sum(preds == labels.data)
 
             epoch_loss = running_loss / len(dataloaders[phase].dataset)
-            epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
+            epoch_acc = float(running_corrects) / len(dataloaders[phase].dataset)
 
             results[phase]['epoch_loss'][epoch] = epoch_loss
             results[phase]['epoch_acc'][epoch] = epoch_acc
@@ -165,7 +169,7 @@ def test(model, dataloaders, device = 'cuda'):
         running_corrects += torch.sum(preds == labels.data)
 
     results['test']['loss'] = running_loss / len(dataloaders['test'].dataset)
-    results['test']['acc'] = running_corrects.double() / len(dataloaders['test'].dataset)
+    results['test']['acc'] = float(running_corrects) / len(dataloaders['test'].dataset)
 
     print('{} Loss: {:.4f} Acc: {:.4f}'.format(
         'Test', results['test']['loss'], results['test']['acc']))
@@ -190,6 +194,8 @@ def filter(model, dataloaders, top_k, n_classes, save_dir, device = 'cuda'):
         if not os.path.exists(os.path.join(save_dir, str(f))):
             os.makedirs(os.path.join(save_dir, str(f)))
 
+    softmax = nn.Softmax(dim=1)
+
     # Iterate over data.
     for inputs, labels, indices in dataloaders['gen']:
         inputs = inputs.float().to(device)
@@ -197,7 +203,10 @@ def filter(model, dataloaders, top_k, n_classes, save_dir, device = 'cuda'):
         indices = indices.to(device)
 
         # forward
-        outputs = model(inputs)
+        outputs = softmax(model(inputs))
+
+        print(len(labels))
+        print(len(outputs))
 
         for i in range(len(outputs)):
             score = outputs[i][labels[i]]
@@ -211,9 +220,39 @@ def filter(model, dataloaders, top_k, n_classes, save_dir, device = 'cuda'):
                     filtered[labels[i], 0, min_index] = score
                     filtered[labels[i], 1, min_index] = indices[i]
 
+    scores = np.zeros((n_classes, top_k))
     for i in range(n_classes):
         print('##############################')
         print('#class: {}'.format(i))
         print('Min score: {:.4f}, Max score: {:.4f}'.format(np.min(filtered[i, 0]), np.max(filtered[i, 0])))
         for j in range(top_k):
             save_image(dataloaders['gen'].dataset[int(filtered[i, 1, j])][0].float()/255, os.path.join(save_dir, str(i), "{idx}.png".format(idx=j)))
+            scores[i, j] = filtered[i, 0, j]
+    with open(save_dir+'scores.pkl', 'wb') as f:
+        pickle.dump(scores, f)
+
+def create_confusion_matrix(model, dataloaders, save_dir, device = 'cuda'):
+
+    print("Creating confusion matrix")
+
+    model.eval()   # Set model to evaluate mode
+
+    y_true = []
+    y_pred = []
+
+    # Iterate over data.
+    for inputs, labels in dataloaders['test']:
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # forward
+        outputs = model(inputs)
+        _, preds = torch.max(outputs, 1)
+
+        y_true += labels.tolist()
+        y_pred += preds.tolist()
+   
+    cfm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize = (10,7))
+    cfm_plot = sn.heatmap(cfm, annot=True)
+    cfm_plot.figure.savefig(save_dir+"cfm.png")

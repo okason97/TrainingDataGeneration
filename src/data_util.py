@@ -60,7 +60,8 @@ class PoseFolder(Dataset):
         f = open(path)
         pose = json.load(f)
         f.close()
-        if len(pose['people']) > 0:
+        if len(pose['people']) > 0 and (sum([pose['people'][0]['hand_right_keypoints_2d'][i] for i in range(2,len(pose['people'][0]['hand_right_keypoints_2d']),3)]) > 0 or 
+                                        sum([pose['people'][0]['hand_left_keypoints_2d'][i] for i in range(2,len(pose['people'][0]['hand_left_keypoints_2d']),3)]) > 0):
             rh_keypoints = pose['people'][0]['hand_right_keypoints_2d']
             lh_keypoints = pose['people'][0]['hand_left_keypoints_2d']
             if sum([rh_keypoints[i] for i in range(2,len(rh_keypoints),3)]) >= sum([lh_keypoints[i] for i in range(2,len(lh_keypoints),3)]):

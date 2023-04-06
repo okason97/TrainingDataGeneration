@@ -11,9 +11,10 @@ import os
 import pickle
 import sys
 sys.path.append('./')
-from utils.loops import train, test, filter
+from utils.loops import train, test, filter, create_confusion_matrix
 import utils.misc as misc
 from data_util import Dataset_
+from pathlib import Path
 
 def prepare_evaluation():
     parser = ArgumentParser(add_help=True)
@@ -27,6 +28,10 @@ def prepare_evaluation():
     parser.add_argument("-sm", "--save_model", action="store_true")
     parser.add_argument("-lm", "--load_model", type=str, default=None)
     parser.add_argument("--top_k", default=-1, type=int)
+    parser.add_argument("-cm", action="store_true", help="confusion matrix")
+    parser.add_argument("--n_classes", default=13, type=int, help="number of classes")
+    parser.add_argument("--dset_used", default=1., type=float, help="percentage of the dataset to be used when training the classifier")
+    parser.add_argument("--val_size", default=0.25, type=float, help="validation size")
 
     parser.add_argument("--seed", type=int, default=-1, help="seed for generating random numbers")
     parser.add_argument("-DDP", "--distributed_data_parallel", action="store_true")
@@ -40,8 +45,7 @@ def prepare_evaluation():
     gpus_per_node, rank = torch.cuda.device_count(), torch.cuda.current_device()
     world_size = gpus_per_node * args.total_nodes
 
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
+    Path(args.save_dir).mkdir(parents=True, exist_ok=True)
 
     if args.seed == -1: args.seed = random.randint(1, 4096)
     if world_size == 1: print("You have chosen a specific GPU. This will completely disable data parallelism.")
@@ -100,7 +104,15 @@ def classify(local_rank, args, world_size, gpus_per_node):
                                hdf5_path=None,
                                load_data_in_memory=True,
                                pose=False)
-    train_dataset, val_dataset = misc.train_val_dataset(dataset = train_dataset, random_state = args.seed)
+    if args.dset_used>1:
+        dset_used = int(args.dset_used)
+    elif args.dset_used != 1:
+        dset_used = 1-args.dset_used
+    else:
+        dset_used = args.dset_used
+    train_dataset, val_dataset = misc.train_val_dataset(dataset = train_dataset, val_split=args.val_size, random_state = args.seed)
+    if dset_used != 1:
+        train_dataset, _ = misc.train_val_dataset(dataset = train_dataset, val_split=None, train_size=dset_used, random_state = args.seed)
     if local_rank == 0:
         print("Size of train dataset: {dataset_size}".format(dataset_size=len(train_dataset)))
         print("Size of validation dataset: {dataset_size}".format(dataset_size=len(val_dataset)))
@@ -154,11 +166,10 @@ def classify(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     # load a network (Efficientnet v2).
     # -----------------------------------------------------------------------------
-    n_classes = 39
     weights = models.EfficientNet_V2_M_Weights.IMAGENET1K_V1
     model = models.efficientnet_v2_m(weights=weights)
     num_ftrs = model.classifier[1].in_features
-    model.fc = nn.Linear(num_ftrs, n_classes)
+    model.fc = nn.Linear(num_ftrs, args.n_classes)
     model = model.to(local_rank)
 
     # -----------------------------------------------------------------------------
@@ -208,9 +219,15 @@ def classify(local_rank, args, world_size, gpus_per_node):
                                         drop_last=True,
                                         persistent_workers=True)
             dataloaders = {'gen': gen_dataloader}
-            filter(model, dataloaders, top_k = args.top_k, n_classes = n_classes, save_dir = os.path.join(args.save_dir,os.path.basename(os.path.normpath(args.dset2)),'train'), device = local_rank)
+            filter(model, dataloaders, top_k = args.top_k, n_classes = args.n_classes, save_dir = os.path.join(args.save_dir,os.path.basename(os.path.normpath(args.dset2)),'train'), device = local_rank)
         else:
             print('No dataset to filter.')
+
+    # -----------------------------------------------------------------------------
+    # filter the top K generated samples.
+    # -----------------------------------------------------------------------------
+    if args.cm:
+        create_confusion_matrix(model, dataloaders, save_dir = args.save_dir, device = local_rank)
 
 if __name__ == "__main__":
     args, world_size, gpus_per_node, rank = prepare_evaluation()

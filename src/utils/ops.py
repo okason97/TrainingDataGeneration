@@ -9,6 +9,7 @@ from torch.nn import init
 import torch
 import torch.nn as nn
 import numpy as np
+from openpose import pyopenpose as op
 
 class SPADE(nn.Module):
     def __init__(self, in_channels, out_channels, MODULES):
@@ -259,3 +260,30 @@ def resize_images(x, resizer, ToTensor, mean, std, device="cuda"):
     x = torch.stack(x, 0).to(device)
     x = (x/255.0 - mean)/std
     return x
+
+def op_start(params):
+    if not params:
+        params = dict()
+        params["model_folder"] = "../../../models/"
+        params["hand"] = True
+        params["hand_detector"] = 2
+        params["body"] = 0
+        params["hand_render"] = 0
+        params["hand_scale_number"] = 6
+        params["hand_scale_range"] = 0.4
+
+    opWrapper = op.WrapperPython()
+    opWrapper.configure(params)
+    opWrapper.start()
+    return opWrapper
+
+def generate_keypoints(generatedImage, opWrapper):
+    datum = op.Datum()
+    datum.cvInputData = generatedImage
+    opWrapper.emplaceAndPop([datum])
+    return datum.handKeypoints[0]
+
+def anatomic_coherence(generatedImage, originalKeypoints, opWrapper):
+    # https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/examples/tutorial_api_python/07_hand_from_image.py
+    generatedKeypoints = generate_keypoints(generatedImage, opWrapper)
+    return np.linalg.norm(generatedKeypoints - originalKeypoints)

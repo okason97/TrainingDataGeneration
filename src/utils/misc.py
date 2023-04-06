@@ -636,8 +636,8 @@ def mixup_data(x_a, x_b, alpha=5, beta=5):
 def mixup_criterion(criterion, pred, y_a, y_b, lam):
     return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
 
-def train_val_dataset(dataset, val_split=0.25, random_state=42):
-    train_idx, val_idx = train_test_split(list(range(len(dataset))), test_size=val_split, random_state=random_state)
+def train_val_dataset(dataset, val_split=0.25, train_size=None, random_state=42):
+    train_idx, val_idx = train_test_split(list(range(len(dataset))), test_size=val_split, train_size=train_size, random_state=random_state)
     return Subset(dataset, train_idx), Subset(dataset, val_idx)
 
 def dataset_with_indices(cls):
