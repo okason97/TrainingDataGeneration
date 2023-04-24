@@ -107,6 +107,8 @@ def load_configs_initialize_training():
     parser.add_argument("-ref", "--ref_dataset", type=str, default="train", help="reference dataset for evaluation[train/valid/test]")
     parser.add_argument("--is_ref_dataset", action="store_true", help="whether to calculate a inception score of the ref dataset.")
 
+    parser.add_argument("--dset_used", type=float, default=1.0, help="size of the training dataset, if less than 1 then it will be the fraction of the dataset used, \
+                        if greater than 1 then it will be the number of elements to be used.")
     parser.add_argument("--pose", action="store_true", help="use poses to aid training.")
     parser.add_argument("--skeleton", action="store_true", help="use vertices instead of keypoints to aid training.")
 

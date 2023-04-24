@@ -121,6 +121,16 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                  load_data_in_memory=cfgs.RUN.load_data_in_memory,
                                  pose=cfgs.RUN.pose,
                                  skeleton=cfgs.RUN.skeleton)
+
+        if cfgs.RUN.dset_used > 1:
+            dset_used = int(cfgs.RUN.dset_used)
+        elif cfgs.RUN.dset_used != 1:
+            dset_used = 1 - cfgs.RUN.dset_used
+        else:
+            dset_used = cfgs.RUN.dset_used
+        if dset_used != 1:
+            train_dataset, _ = misc.train_val_dataset(dataset = train_dataset, val_split=None, train_size=dset_used, random_state = cfgs.RUN.seed)
+
         if local_rank == 0:
             logger.info("Train dataset size: {dataset_size}".format(dataset_size=len(train_dataset)))
     else:
@@ -196,6 +206,13 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                      drop_last=False)
     else:
         eval_dataloader = None
+
+
+    # -----------------------------------------------------------------------------
+    # load openpose model
+    # -----------------------------------------------------------------------------
+
+
 
     # -----------------------------------------------------------------------------
     # load a generator and a discriminator

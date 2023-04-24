@@ -32,6 +32,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import pyopenpose as op
 
 import utils.sample as sample
 import utils.losses as losses
@@ -648,3 +649,37 @@ def dataset_with_indices(cls):
     return type(cls.__name__, (cls,), {
         '__getitem__': __getitem__,
     })
+
+def op_start(params):
+    if not params:
+        params = dict()
+        params["model_folder"] = "/mnt/sda2/old_home/grios/openpose/models"
+        params["hand"] = True
+        params["hand_detector"] = 2
+        params["body"] = 0
+        params["hand_render"] = 0
+        params["hand_scale_number"] = 6
+        params["hand_scale_range"] = 0.4
+
+    opWrapper = op.WrapperPython()
+    opWrapper.configure(params)
+    opWrapper.start()
+    return opWrapper
+
+def generate_keypoints(generatedImage, opWrapper):
+    datum = op.Datum()
+    datum.cvInputData = generatedImage
+    handRectangles = [
+    # Left/Right hands person 0
+        [
+        op.Rectangle(0, 0, max(np.array(generatedImage).shape), max(np.array(generatedImage).shape)),
+        op.Rectangle(0., 0., 0., 0.),
+        ],
+    ]
+    opWrapper.emplaceAndPop(op.VectorDatum([datum]))
+    return datum.handKeypoints[0]
+
+def anatomic_coherence(generatedImage, originalKeypoints, opWrapper):
+    # https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/examples/tutorial_api_python/07_hand_from_image.py
+    generatedKeypoints = generate_keypoints(generatedImage, opWrapper)
+    return np.linalg.norm(generatedKeypoints - originalKeypoints)
