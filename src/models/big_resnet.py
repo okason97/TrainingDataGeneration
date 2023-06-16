@@ -76,8 +76,7 @@ class Generator(nn.Module):
         self.num_blocks = len(self.in_dims)
         if self.g_cond_mtd == "SPADE":
             self.chunk_size = z_dim
-            skeleton = True
-            self.affine_input_dim = 20 if skeleton else 21
+            self.affine_input_dim = 20 if self.MODEL.skeleton else 21
         else:
             self.chunk_size = z_dim // (self.num_blocks + 1)
             self.affine_input_dim = self.chunk_size
@@ -258,9 +257,9 @@ class Discriminator(nn.Module):
                  num_classes, d_init, d_depth, mixed_precision, MODULES, MODEL):
         super(Discriminator, self).__init__()
         self.d_cond_mtd = d_cond_mtd
+        self.MODEL = MODEL
         if self.d_cond_mtd == "CAT":
-            skeleton = True
-            keypoints_dim = 20 if skeleton else 21
+            keypoints_dim = 20 if self.MODEL.skeleton else 21
         else:
             keypoints_dim = 0
         d_in_dims_collection = {
@@ -295,7 +294,6 @@ class Discriminator(nn.Module):
         self.mixed_precision = mixed_precision
         self.in_dims = d_in_dims_collection[str(img_size)]
         self.out_dims = d_out_dims_collection[str(img_size)]
-        self.MODEL = MODEL
         down = d_down[str(img_size)]
 
         self.blocks = []

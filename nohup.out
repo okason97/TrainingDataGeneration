@@ -1,5 +1,123 @@
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE skeleton generator--
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE skeleton generator--
+--train RWTH-small SPADE skeleton generator--
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE generator--
+--train RWTH-small SPADE skeleton generator--
+--train hagrid SPADE generator--
+--train RWTH-small SPADE skeleton generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+./scripts: line 13: te/SPADE-skeleton/run0.err: No such file or directory
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
 Terminated
-./scripts: line 8: ./logs/RWTH-small/SPADE-highcond/run0.out: No such file or directory
-./scripts: line 9: ./logs/RWTH-small/SPADE-skeleton-highcond/run0.out: No such file or directory
-./scripts: line 8: ./logs/RWTH-small/SPADE-highcond/run0.out: No such file or directory
-./scripts: line 9: ./logs/RWTH-small/SPADE-skeleton-highcond/run0.out: No such file or directory
+./scripts: line 13: r: command not found
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+Terminated
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+Terminated
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--
+--train hagrid SPADE generator--

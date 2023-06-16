@@ -27,10 +27,10 @@ LOSS:
   m_p: 0.98
   temperature: 0.5
 OPTIMIZATION:
-  batch_size: 64
+  batch_size: 32
   g_lr: 0.00028284271
   d_lr: 0.00028284271
-  total_steps: 25000
+  total_steps: 10000
 AUG:
   apply_diffaug: True
   diffaug_type: "diffaug"

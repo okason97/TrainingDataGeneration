@@ -32,8 +32,10 @@ import h5py as h5
 from data_util import Dataset_
 
 
-def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
-    file_name = "{dataset_name}_{size}{pose}_train.hdf5".format(dataset_name=name, size=img_size, pose="_pose" if RUN.pose else "")
+def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, train, DATA, RUN):
+    file_name = "{dataset_name}_{size}{pose}{skeleton}{dset_used}_{train}.hdf5".format(dataset_name=name, size=img_size, pose="_pose" if RUN.pose else "", skeleton="_skeleton" if RUN.skeleton else "", 
+                                                                                     dset_used="_"+str(RUN.dset_used) if RUN.dset_used != 1 else "", 
+                                                                                     train='train' if train else 'val')
     file_path = join(data_dir, file_name)
     hdf5_dir = dirname(file_path)
     if not exists(hdf5_dir):
@@ -45,7 +47,7 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
     else:
         dataset = Dataset_(data_name=DATA.name,
                            data_dir=RUN.data_dir,
-                           train=True,
+                           train=train,
                            crop_long_edge=crop_long_edge,
                            resize_size=resize_size,
                            random_flip=False,
@@ -56,13 +58,13 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                            skeleton=RUN.skeleton)
 
         dataloader = DataLoader(dataset,
-                                batch_size=500,
-                                shuffle=False,
-                                pin_memory=False,
+                                batch_size=128,
+                                shuffle=True,
+                                pin_memory=True,
                                 num_workers=RUN.num_workers,
                                 drop_last=False)
 
-        print("Start to load {name} into an HDF5 file with chunk size 500.".format(name=name))
+        print("Start to load {name} into an HDF5 file with chunk size 64.".format(name=name))
         if RUN.pose:
             for i, (x, y, p) in enumerate(tqdm(dataloader)):
                 x = np.transpose(x.numpy(), (0, 2, 3, 1))
@@ -74,7 +76,7 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                                                     x.shape,
                                                     dtype="uint8",
                                                     maxshape=(len(dataset), img_size, img_size, 3),
-                                                    chunks=(500, img_size, img_size, 3),
+                                                    chunks=(128, img_size, img_size, 3),
                                                     compression=False)
                         print("Image chunks chosen as {chunk}".format(chunk=str(imgs_dset.chunks)))
                         imgs_dset[...] = x
@@ -83,16 +85,17 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                                                     y.shape,
                                                     dtype="int64",
                                                     maxshape=(len(dataloader.dataset), ),
-                                                    chunks=(500, ),
+                                                    chunks=(128, ),
                                                     compression=False)
                         print("Label chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
                         labels_dset[...] = y
 
+                        # revisar las dimensiones del chunk (x,y,c) o (c,x,y)
                         poses_dset = f.create_dataset("poses",
                                                     p.shape,
                                                     dtype="float32",
                                                     maxshape=(len(dataset), 20 if RUN.skeleton else 21, img_size, img_size),
-                                                    chunks=(500, 20 if RUN.skeleton else 21, img_size, img_size),
+                                                    chunks=(128, 20 if RUN.skeleton else 21, img_size, img_size),
                                                     compression=False)
                         print("Pose chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
                         poses_dset[...] = p
@@ -115,7 +118,7 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                                                     x.shape,
                                                     dtype="uint8",
                                                     maxshape=(len(dataset), img_size, img_size, 3),
-                                                    chunks=(500, img_size, img_size, 3),
+                                                    chunks=(128, img_size, img_size, 3),
                                                     compression=False)
                         print("Image chunks chosen as {chunk}".format(chunk=str(imgs_dset.chunks)))
                         imgs_dset[...] = x
@@ -124,7 +127,7 @@ def make_hdf5(name, img_size, crop_long_edge, resize_size, data_dir, DATA, RUN):
                                                     y.shape,
                                                     dtype="int64",
                                                     maxshape=(len(dataloader.dataset), ),
-                                                    chunks=(500, ),
+                                                    chunks=(128, ),
                                                     compression=False)
                         print("Label chunks chosen as {chunk}".format(chunk=str(labels_dset.chunks)))
                         labels_dset[...] = y

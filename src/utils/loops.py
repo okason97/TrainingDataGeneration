@@ -13,8 +13,10 @@ from utils.misc import mixup_data, mixup_criterion
 from sklearn.metrics import confusion_matrix
 import seaborn as sn
 import matplotlib.pyplot as plt
+import random
+import math
 
-def train(model, dataloaders, epochs, mode, device):
+def train(model, dataloaders, epochs, growth, reg_alpha, reg_beta, mode, device):
 
     print("Training started")
 
@@ -25,18 +27,29 @@ def train(model, dataloaders, epochs, mode, device):
     if mode == 'gen':
         gen_dataloader = {'train': dataloaders['gen'],
                           'val': dataloaders['val']}
-        model, _, _ = train_loop(model, gen_dataloader, int(epochs/4), mode, device)
+        model, _, _ = train_loop(model, gen_dataloader, int(epochs/4), growth, reg_alpha, reg_beta, mode, device)
 
-    model, results, best_model_wts = train_loop(model, dataloaders, epochs, mode, device)
+    model, results, best_model_wts = train_loop(model, dataloaders, epochs, growth, reg_alpha, reg_beta, mode, device)
 
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model, results
 
-def train_loop(model, dataloaders, epochs, mode, device):
+def growth_function(x,alpha,beta):
+    return alpha+(1-alpha)*(1-math.exp(-beta*x))
+
+def decay_function(x,alpha,beta):
+    return alpha*math.exp(-beta*x)
+
+def train_loop(model, dataloaders, epochs, growth, reg_alpha, reg_beta, mode, device):
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, betas=(0.0, 0.999), eps=1e-6)
 
     criterion = nn.CrossEntropyLoss()
+
+    if growth:
+        change_function = growth_function
+    else:
+        change_function = decay_function
 
     alpha = 5.0
     beta = 5.0
@@ -78,7 +91,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
                         inputs_g = inputs_g.to(device)
                         labels_ga = labels_g[idx].to(device)
                         labels_gb = labels_g.to(device)
-                    if mode == 'mixgen':
+                    if mode == 'mixgen' and random.random() >= change_function(epoch,reg_alpha,reg_beta):
                         inputs_g, labels_g = next(iter(dataloaders['gen']))
                         inputs, lam = mixup_data(inputs_g, inputs, alpha, beta)
                         labels_a = labels_g.to(device)
@@ -105,7 +118,7 @@ def train_loop(model, dataloaders, epochs, mode, device):
                         loss = mixup_criterion(criterion, outputs, labels_a, labels_b, lam)
                         if mode == 'reggen':
                             loss_g = mixup_criterion(criterion, outputs_g, labels_ga, labels_gb, lam_g)
-                            loss = loss + loss_g
+                            loss = loss + loss_g * change_function(epoch,reg_alpha,reg_beta)
                     else:
                         loss = criterion(outputs, labels)
 

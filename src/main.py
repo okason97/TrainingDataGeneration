@@ -74,6 +74,7 @@ def load_configs_initialize_training():
 
     parser.add_argument("-t", "--train", action="store_true")
     parser.add_argument("-hdf5", "--load_train_hdf5", action="store_true", help="load train images from a hdf5 file for fast I/O")
+    parser.add_argument("-hdf5_val", "--load_val_hdf5", action="store_true", help="load validation images from a hdf5 file for fast I/O")
     parser.add_argument("-l", "--load_data_in_memory", action="store_true", help="put the whole train dataset on the main memory for fast I/O")
     parser.add_argument("-metrics", "--eval_metrics", nargs='+', default=['fid'],
                         help="evaluation metrics to use during training, a subset list of ['fid', 'is', 'prdc'] or none")
@@ -151,10 +152,22 @@ def load_configs_initialize_training():
                                                                 crop_long_edge=crop_long_edge,
                                                                 resize_size=resize_size,
                                                                 data_dir=cfgs.RUN.data_dir,
+                                                                train=True,
                                                                 DATA=cfgs.DATA,
                                                                 RUN=cfgs.RUN)
     else:
         hdf5_path = None
+    if cfgs.RUN.load_val_hdf5:
+        hdf5_path_val, crop_long_edge_val, resize_size_val = hdf5.make_hdf5(name=cfgs.DATA.name,
+                                                                            img_size=cfgs.DATA.img_size,
+                                                                            crop_long_edge=crop_long_edge,
+                                                                            resize_size=resize_size,
+                                                                            data_dir=cfgs.RUN.data_dir,
+                                                                            train=False,
+                                                                            DATA=cfgs.DATA,
+                                                                            RUN=cfgs.RUN)
+    else:
+        hdf5_path_val = None
     cfgs.PRE.crop_long_edge, cfgs.PRE.resize_size = crop_long_edge, resize_size
 
     misc.prepare_folder(names=cfgs.MISC.base_folders, save_dir=cfgs.RUN.save_dir)
@@ -168,10 +181,10 @@ def load_configs_initialize_training():
 
     if cfgs.OPTIMIZATION.world_size == 1:
         print("You have chosen a specific GPU. This will completely disable data parallelism.")
-    return cfgs, gpus_per_node, run_name, hdf5_path, rank
+    return cfgs, gpus_per_node, run_name, hdf5_path, hdf5_path_val, rank
 
 if __name__ == "__main__":
-    cfgs, gpus_per_node, run_name, hdf5_path, rank = load_configs_initialize_training()
+    cfgs, gpus_per_node, run_name, hdf5_path, hdf5_path_val, rank = load_configs_initialize_training()
 
     if cfgs.RUN.distributed_data_parallel and cfgs.OPTIMIZATION.world_size > 1:
         mp.set_start_method("spawn", force=True)
@@ -181,7 +194,8 @@ if __name__ == "__main__":
                                         args=(cfgs,
                                               gpus_per_node,
                                               run_name,
-                                              hdf5_path),
+                                              hdf5_path,
+                                              hdf5_path_val),
                                         nprocs=gpus_per_node)
         except KeyboardInterrupt:
             misc.cleanup()
@@ -190,4 +204,5 @@ if __name__ == "__main__":
                            cfgs=cfgs,
                            gpus_per_node=gpus_per_node,
                            run_name=run_name,
-                           hdf5_path=hdf5_path)
+                           hdf5_path=hdf5_path,
+                           hdf5_path_val=hdf5_path_val)

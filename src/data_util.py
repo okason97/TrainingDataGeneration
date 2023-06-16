@@ -80,7 +80,7 @@ class PoseFolder(Dataset):
                 for j in range(1,5):
                     x1 = np.clip(int(keypoints[(i*4+j)*3]), 0, shape[0]-1)
                     y1 = np.clip(int(keypoints[(i*4+j)*3+1]), 0, shape[1]-1)
-                    rr, cc, val = line_aa(x0, y0, x1, y1)
+                    rr, cc, val = line_aa(y0, x0, y1, x1)
                     sample[i*4+j-1, rr, cc] = val
                     x0 = x1
                     y0 = y1
@@ -90,12 +90,12 @@ class PoseFolder(Dataset):
             pos = np.dstack((x, y))
             sample = torch.zeros((self.n_keypoints, shape[0], shape[1]))
             for i in range(self.n_keypoints):
-                kx = keypoints[i*3]
+                kx = shape[0]-keypoints[i*3]
                 ky = keypoints[i*3+1]
                 # confidence = np.clip(keypoints[i*3+2], 0, 1)
                 # shape[1]-shape[1]*confidence+1 | shape[0]-shape[0]*confidence+1
                 rv = multivariate_normal([kx, ky], [[4, 0.], [0., 4]])
-                sample[i] = torch.tensor(np.copy(rv.pdf(pos))).float()
+                sample[i] = torch.tensor(np.rot90(rv.pdf(pos),3).copy()).float()
             return sample
 
 

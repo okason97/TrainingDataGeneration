@@ -12,7 +12,6 @@ import torch
 import utils.sample as sample
 import utils.losses as losses
 
-
 def generate_images_and_stack_features(generator, discriminator, eval_model, num_generate, y_sampler, batch_size, z_prior,
                                        truncation_factor, z_dim, num_classes, LOSS, RUN, MODEL, is_stylegan, generator_mapping,
                                        generator_synthesis, world_size, DDP, pose, device, logger, disable_tqdm):
@@ -21,15 +20,16 @@ def generate_images_and_stack_features(generator, discriminator, eval_model, num
 
     if device == 0 and not disable_tqdm:
         logger.info("generate images and stack features ({} images).".format(num_generate))
-    num_batches = int(math.ceil(float(num_generate) / float(batch_size)))
+    num_batches = int(math.ceil(float(num_generate) / float(batch_size)))-1
     if DDP: num_batches = num_batches//world_size + 1
+    y_sampler = iter(y_sampler) if pose else y_sampler
     for i in tqdm(range(num_batches), disable=disable_tqdm):
         fake_images, fake_labels, _, _, _, _, _ = sample.generate_images(z_prior=z_prior,
                                                                    truncation_factor=truncation_factor,
                                                                    batch_size=batch_size,
                                                                    z_dim=z_dim,
                                                                    num_classes=num_classes,
-                                                                   y_sampler=iter(y_sampler) if pose else y_sampler,
+                                                                   y_sampler=y_sampler,
                                                                    radius="N/A",
                                                                    generator=generator,
                                                                    discriminator=discriminator,

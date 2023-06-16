@@ -55,6 +55,8 @@ def sample_y(y_sampler, batch_size, num_classes, device):
 
     elif isinstance(y_sampler, int):
         y_fake = torch.tensor([y_sampler] * batch_size, dtype=torch.long).to(device)
+    elif isinstance(y_sampler, tuple):
+        y_fake = y_sampler[0].to(device)
     elif hasattr(y_sampler, '__next__'):
         _, fake_label, fake_pose = next(y_sampler)
         fake_label = torch.split(fake_label, batch_size)[0].to(device)

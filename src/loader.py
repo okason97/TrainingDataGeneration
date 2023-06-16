@@ -35,7 +35,8 @@ import models.model as model
 import metrics.preparation as pp
 
 
-def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
+
+def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path, hdf5_path_val):
     # -----------------------------------------------------------------------------
     # define default variables for loading ckpt or evaluating the trained GAN model.
     # -----------------------------------------------------------------------------
@@ -53,6 +54,7 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
         metric_dict_during_train.update({"FID": []})
     if "prdc" in cfgs.RUN.eval_metrics:
         metric_dict_during_train.update({"Improved_Precision": [], "Improved_Recall": [], "Density":[], "Coverage": []})
+    cfgs.MODEL.skeleton = cfgs.RUN.skeleton
 
     # -----------------------------------------------------------------------------
     # determine cuda, cudnn, and backends settings.
@@ -124,7 +126,7 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
 
         if cfgs.RUN.dset_used > 1:
             dset_used = int(cfgs.RUN.dset_used)
-        elif cfgs.RUN.dset_used != 1:
+        elif cfgs.RUN.dset_used < 1:
             dset_used = 1 - cfgs.RUN.dset_used
         else:
             dset_used = cfgs.RUN.dset_used
@@ -146,7 +148,7 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                 crop_long_edge=False if cfgs.DATA.name in cfgs.MISC.no_proc_data else True,
                                 resize_size=None if cfgs.DATA.name in cfgs.MISC.no_proc_data else cfgs.DATA.img_size,
                                 random_flip=False,
-                                hdf5_path=None,
+                                hdf5_path=hdf5_path_val,
                                 normalize=True,
                                 load_data_in_memory=False,
                                 pose=cfgs.RUN.pose,
@@ -170,6 +172,10 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
                                            shuffle=True,
                                            drop_last=True)
         topk = cfgs.OPTIMIZATION.batch_size
+    elif cfgs.RUN.train and cfgs.RUN.pose:
+        train_sampler = misc.weak_shuffling_sampler(train_dataset, 
+                                                    batch_size=cfgs.OPTIMIZATION.batch_size,
+                                                    drop_last=True)
     else:
         train_sampler = None
     cfgs.OPTIMIZATION.basket_size = cfgs.OPTIMIZATION.batch_size * cfgs.OPTIMIZATION.acml_steps * cfgs.OPTIMIZATION.d_updates_per_step

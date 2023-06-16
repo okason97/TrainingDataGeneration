@@ -32,6 +32,10 @@ def prepare_evaluation():
     parser.add_argument("--n_classes", default=13, type=int, help="number of classes")
     parser.add_argument("--dset_used", default=1., type=float, help="percentage of the dataset to be used when training the classifier")
     parser.add_argument("--val_size", default=0.25, type=float, help="validation size")
+    parser.add_argument("--growth", action="store_true", help="regularization growth or decay.")
+    parser.add_argument("--reg_alpha", default=1., type=float, help="regularization loss starting weight.")
+    parser.add_argument("--reg_beta", default=-1., type=float, help="regularization loss weight change.")
+    parser.add_argument("-l", "--load_data_in_memory", action="store_true", help="put the whole train dataset on the main memory for fast I/O")
 
     parser.add_argument("--seed", type=int, default=-1, help="seed for generating random numbers")
     parser.add_argument("-DDP", "--distributed_data_parallel", action="store_true")
@@ -81,7 +85,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                            random_flip=True,
                            normalize=True,
                            hdf5_path=None,
-                           load_data_in_memory=True,
+                           load_data_in_memory=args.load_data_in_memory,
                            pose=False)
     test_dataset = Dataset_(data_name='rwth-test',
                            data_dir=args.dset1,
@@ -91,7 +95,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                            random_flip=True,
                            normalize=True,
                            hdf5_path=None,
-                           load_data_in_memory=True,
+                           load_data_in_memory=args.load_data_in_memory,
                            pose=False)
     if args.dset2 != 'none':
         gen_dataset = Dataset_(data_name='rwth-gen-spade',
@@ -102,7 +106,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                                random_flip=True,
                                normalize=True,
                                hdf5_path=None,
-                               load_data_in_memory=True,
+                               load_data_in_memory=args.load_data_in_memory,
                                pose=False)
     if args.dset_used>1:
         dset_used = int(args.dset_used)
@@ -179,7 +183,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
         model.load_state_dict(torch.load(args.load_model))
         model.eval()
     else:
-        model, train_results = train(model, dataloaders, epochs = args.epochs, mode = args.train_mode, device = local_rank)
+        model, train_results = train(model, dataloaders, epochs = args.epochs, growth=args.growth, reg_alpha=args.reg_alpha, reg_beta=args.reg_beta, mode = args.train_mode, device = local_rank)
         if not args.save_dir is None:
             with open(args.save_dir+'train_results.pkl', 'wb') as f:
                 pickle.dump(train_results, f)
@@ -207,7 +211,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                                 random_flip=False,
                                 normalize=False,
                                 hdf5_path=None,
-                                load_data_in_memory=True,
+                                load_data_in_memory=args.load_data_in_memory,
                                 pose=False)
 
             gen_dataloader = DataLoader(dataset=gen_dataset,
