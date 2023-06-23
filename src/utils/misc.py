@@ -686,10 +686,11 @@ def anatomic_coherence(generatedImage, originalKeypoints, opWrapper):
     generatedKeypoints = generate_keypoints(generatedImage, opWrapper)
     return np.linalg.norm(generatedKeypoints - originalKeypoints)
 
-# def confidence_average(generatedImage, opWrapper):
-# https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/examples/tutorial_api_python/07_hand_from_image.py
-# generatedKeypoints = generate_keypoints(generatedImage, opWrapper)
-# return np.linalg.norm(generatedKeypoints - originalKeypoints)
+def anatomic_confidence(generatedImage, opWrapper):
+    # https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/examples/tutorial_api_python/07_hand_from_image.py
+    generatedKeypoints = generate_keypoints(generatedImage, opWrapper)
+    confidences = [keypoints[i] for i in range(2,len(generatedKeypoints),3)] 
+    return sum(confidences)/(len(generatedKeypoints)/3), min(confidences), max(confidences)
 
 class RandomBatchSampler(Sampler):
     """Sampling class to create random sequential batches from a given dataset
