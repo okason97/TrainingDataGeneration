@@ -3,16 +3,22 @@
 
 # Train Generator
 #python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/data/datasets/rwth/ -cfg ./src/configs/RWTH/SPADE.yaml -save ./samples/RWTH/SPADE/ --is_ref_dataset --project titan-skeleton --num_workers 4 -every 500 --pose --skeleton > ./logs/RWTH/SPADE/run0.out 2> ./logs/RWTH/SPADE/run0.err
-#python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/rwth/ -cfg ./src/configs/RWTH/SPADE-ReACGAN.yaml -save ./samples/RWTH/SPADE-ReACGAN/ --is_ref_dataset --project titan-skeleton --num_workers 4 -every 500 --pose --skeleton > ./logs/RWTH/SPADE-ReACGAN/run0.out 2> ./logs/RWTH/SPADE-ReACGAN/run0.err
+#python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/static-sl/rwth/ -cfg ./src/configs/RWTH/SPADE-ReACGAN.yaml -save ./samples/RWTH/SPADE-ReACGAN/ --is_ref_dataset --project titan-skeleton --num_workers 4 -every 500 --pose --skeleton > ./logs/RWTH/SPADE-ReACGAN/run0.out 2> ./logs/RWTH/SPADE-ReACGAN/run0.err
 #python src/main.py -t -hdf5 -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/rwth-complete/ -cfg ./src/configs/RWTH-complete/ReACGAN-ADC-DiffAug.yaml -save ./samples/RWTH-complete/ReACGAN-ADC-DiffAug/ --is_ref_dataset --project titan --num_workers 4 -every 500 --print_every 100 > ./logs/RWTH-complete/ReACGAN-ADC-DiffAug/run0.out 2> ./logs/RWTH-complete/ReACGAN-ADC-DiffAug/run0.err
 #python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE-highcond.yaml -save ./samples/RWTH-small/SPADE-highcond/ --is_ref_dataset --project titan --num_workers 4 -every 500 --print_every 500 --pose > ./logs/RWTH-small/SPADE-highcond/run0.out 2> ./logs/RWTH-small/SPADE-highcond/run0.err
 #python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE-highcond.yaml -save ./samples/RWTH-small/SPADE-skeleton-highcond/ --is_ref_dataset --project titan --num_workers 4 -every 500 --print_every 500 --pose --skeleton > ./logs/RWTH-small/SPADE-skeleton-highcond/run0.out 2> ./logs/RWTH-small/SPADE-skeleton-highcond/run0.err
 
-echo "--train hagrid SPADE generator--"
-python src/main.py -t -hdf5 -hdf5_val -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/hagrid-complete/ -cfg ./src/configs/hagrid-complete/SPADE.yaml -save /mnt/sda2/old_home/grios/TDGsamples/hagrid-complete/SPADE-skeleton/ --is_ref_dataset --project titan --num_workers 4 -every 100 --print_every 100 --pose --skeleton -ckpt /mnt/sda2/old_home/grios/TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best > ./logs/hagrid-complete/SPADE-skeleton/run0.out 2> ./logs/hagrid-complete/SPADE-skeleton/run0.err
+#echo "--train hagrid SPADE generator--"
+#python src/main.py -t -hdf5 -hdf5_val -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/hagrid-complete/ -cfg ./src/configs/hagrid-complete/SPADE.yaml -save /mnt/sda2/models/TDG//TDGsamples/hagrid-complete/SPADE-skeleton/ --is_ref_dataset --project titan --num_workers 4 -every 100 --print_every 100 --pose --skeleton -ckpt /mnt/sda2/models/TDG//TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best > ./logs/hagrid-complete/SPADE-skeleton/run0.out 2> ./logs/hagrid-complete/SPADE-skeleton/run0.err
+
+#echo "--eval hagrid SPADE generator--"
+#python src/main.py -hdf5 -hdf5_val -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/hagrid-complete/ -cfg ./src/configs/hagrid-complete/SPADE.yaml -save /mnt/sda2/models/TDG//TDGsamples/hagrid-complete/SPADE-skeleton/ --is_ref_dataset --project titan --num_workers 4 -every 1 --print_every 1 --pose --skeleton -ckpt /mnt/sda2/models/TDG//TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best > ./logs/hagrid-complete/SPADE-skeleton/run0.out 2> ./logs/hagrid-complete/SPADE-skeleton/run0.err
+
+#echo "--eval hagrid ReACGAN generator--"
+#python src/main.py -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/hagrid-complete/ -cfg ./src/configs/hagrid-complete/ReACGAN-ADC-DiffAug.yaml -save /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/ReACGAN-ADC-DiffAug/ --is_ref_dataset --project titan --num_workers 4 -every 1 --print_every 1 -ckpt /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/ReACGAN-ADC-DiffAug/checkpoints/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ -best > ./logs/hagrid-complete/ReACGAN-ADC-DiffAug/run0.out 2> ./logs/hagrid-complete/ReACGAN-ADC-DiffAug/run0.err
 
 #echo "--train RWTH-small SPADE generator--"
-#python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE-highcond.yaml -save ./samples/RWTH-small/SPADE-highcond/ --is_ref_dataset --project titan --num_workers 4 -every 500 --print_every 500 --pose > ./logs/RWTH-small/SPADE-highcond/run0.out 2> ./logs/RWTH-small/SPADE-highcond/run0.err
+#python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/static-sl/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE-highcond.yaml -save /mnt/sda2/models/TDG/TDGsamples/RWTH-small/SPADE-skeleton/ --is_ref_dataset --project titan --num_workers 4 -every 500 --print_every 500 --pose --skeleton > ./logs/RWTH-small/SPADE-highcond/run0.out 2> ./logs/RWTH-small/SPADE-highcond/run0.err
 
 #echo "--train RWTH-small SPADE skeleton generator--"
 #python src/main.py -t -hdf5 -l -batch_stat -metrics is fid prdc -ref "valid" -data /mnt/sda2/datasets/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE-highcond.yaml -save ./samples/RWTH-small/SPADE-skeleton-highcond/ --is_ref_dataset --project titan --num_workers 4 -every 500 --print_every 500 --pose --skeleton > ./logs/RWTH-small/SPADE-skeleton-highcond/run0.out 2> ./logs/RWTH-small/SPADE-skeleton-highcond/run0.err
@@ -41,56 +47,61 @@ python src/main.py -t -hdf5 -hdf5_val -batch_stat -metrics is fid prdc -ref "val
 #python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/rwth -cfg ./src/configs/RWTH/SPADE.yaml -save ./samples/RWTH/SPADE-skeleton/ -ckpt ./samples/RWTH/SPADE/checkpoints/RWTH-SPADE-train-2022_08_07_22_50_49/ --num_workers 4 --pose --skeleton > ./logs/RWTH/SPADE/sf0.out 2> ./logs/RWTH/SPADE/sf0.err
 #python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/rwth -cfg ./src/configs/RWTH/SPADE-ReACGAN.yaml -save ./samples/RWTH/SPADE-ReACGAN-skeleton/ -ckpt ./samples/RWTH/SPADE-ReACGAN/checkpoints/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ --num_workers 4 --truncation_factor 0.5 --pose > ./logs/RWTH/SPADE-ReACGAN/sf0.out 2> ./logs/RWTH/SPADE-ReACGAN/sf0.err
 #python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/rwth-small/ -cfg ./src/configs/RWTH-small/ReACGAN-ADC-DiffAug-highcond.yaml -save /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/ -ckpt ./samples/RWTH-small/ReACGAN-ADC-DiffAug-highcond/checkpoints/RWTH-ReACGAN-ADC-DiffAug-highcond-train-2023_02_07_11_40_17/ -best --num_workers 4 --truncation_factor 0.5 > ./logs/RWTH-small/ReACGAN-ADC-DiffAug-highcond/sf0.out 2> ./logs/RWTH-small/ReACGAN-ADC-DiffAug-highcond/sf0.err
+#python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/static-sl/hagrid-complete/ -cfg ./src/configs/hagrid-complete/SPADE.yaml -save /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/ -ckpt /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best --num_workers 4 --pose --skeleton > ./logs/hagrid-complete/SPADE-skeleton/sf0.out 2> ./logs/hagrid-complete/SPADE-skeleton/sf0.err
+#python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/static-sl/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE-highcond.yaml -save /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/ -ckpt /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best --num_workers 4 --pose --skeleton > ./logs/RWTH-small/SPADE-skeleton-hagrid/sf0.out 2> ./logs/RWTH-small/SPADE-skeleton-hagrid/sf0.err
+#python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/rwth-small/ -cfg ./src/configs/RWTH-small/SPADE.yaml -save /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/ -ckpt /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best --num_workers 4 --pose --skeleton > ./logs/RWTH-small/SPADE-skeleton-hagrid/sf0.out 2> ./logs/RWTH-small/SPADE-skeleton-hagrid/sf0.err
+#python src/main.py -sd -sd_num 1000 -ref "valid" -data /mnt/sda2/datasets/static-sl/rwth/ -cfg ./src/configs/RWTH/SPADE-highcond.yaml -save /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/ -ckpt /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/checkpoints/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ -best --num_workers 4 --pose --skeleton > ./logs/RWTH/SPADE-skeleton-hagrid/sf0.out 2> ./logs/RWTH/SPADE-skeleton-hagrid/sf0.err
 
-#mkdir -p /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/train/
-#mv /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/samples/ReACGAN-ADC-DiffAug-highcond-train-2023_02_07_11_40_17/fake/* /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/train/
+#mkdir -p /mnt/sda2/datasets/generated/RWTH-SPADE-hagridmodel-train-2023_06_09_14_37_21/train/
+#mv /mnt/sda2/models/TDG/TDGsamples/hagrid-complete/SPADE-skeleton/samples/SPADE-highcond-train-2023_06_09_14_37_21/fake/* /mnt/sda2/datasets/generated/RWTH-SPADE-hagridmodel-train-2023_06_09_14_37_21/train/
 
 # Train classifier rwth
 #echo "--train rwth classifier on real data--"
-#python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/rwth/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/rwth/ -sm --num_workers 4 --epochs 150 --n_classes 39 --dims 64
+#python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/static-sl/rwth/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/real/rwth/ -sm --num_workers 4 --epochs 150 --n_classes 39 --dims 64
 # Train classifier hagrid
-#echo "--train hagrid classifier on real data--"
-#python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/hagrid-complete/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/hagrid-complete/ -sm --num_workers 4 --epochs 10 --n_classes 18 --dims 64
+echo "--train hagrid classifier on real data--"
+python src/classify.py --train_mode real --imagenet_weights --dset1 /mnt/sda2/datasets/static-sl/hagrid-complete/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/real/hagrid-complete/ -sm --num_workers 4 --epochs 10 --n_classes 18 --dims 64
+#echo "--train hagrid classifier on real data 60 epochs--"
+#python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/static-sl/hagrid-complete/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/real/hagrid-complete-60epochs/ -sm --num_workers 4 --epochs 60 --n_classes 18 --dims 64
 # Train classifier rwth-small
 #echo "--train rwth-small classifier on real data--"
 #python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/rwth-small/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/rwth-small/ -sm --num_workers 4 --epochs 100 --n_classes 13 --dims 64
 
-# ENTRENAR ESTO DESPUES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Filter top k samples
 #echo "--filter top-k rwth--"
-#python src/classify.py --top_k 300 -lm /mnt/sda2/old_home/grios/classifier_results/real/rwth/model_state_dict.pt --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/datasets/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/rwth/ --num_workers 4 --n_classes 39 --dims 64
+#python src/classify.py --top_k 1000 -lm /mnt/sda2/models/TDG/classifier_results/real/rwth/model_state_dict.pt --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/ --batch_size 128 -save /mnt/sda2/datasets/generated/filtered/ --num_workers 4 --n_classes 39 --dims 64
 #echo "--filter top-k hahgrid--"
 #python src/classify.py --top_k 300 -lm /mnt/sda2/old_home/grios/classifier_results/real/hagrid-complete/model_state_dict.pt --dset1 /mnt/sda2/datasets/hagrid-complete/ --dset2 /mnt/sda2/datasets/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/hagrid-complete/ --num_workers 4 --n_classes 18 --dims 64
 #echo "--filter top-k rwth-small--"
 #python src/classify.py --top_k 300 -lm /mnt/sda2/old_home/grios/classifier_results/real/rwth-small/model_state_dict.pt --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/rwth-small/ --num_workers 4 --n_classes 13 --dims 64
 
 #echo "--RWTH gen--"
-#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/datasets/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/gen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64
-#echo "--RWTH mixgen--"
-#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/datasets/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/mixgen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
-#echo "--RWTH reggen--"
-#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/datasets/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/regen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
-#echo "--Hagrid gen--"
-#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/hagrid-complete/ --dset2 /mnt/sda2/datasets/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/gen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64
-#echo "--Hagrid mixgen--"
-#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/hagrid-complete/ --dset2 /mnt/sda2/datasets/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/mixgen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
-#echo "--Hagrid reggen--"
-#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/hagrid-complete/ --dset2 /mnt/sda2/datasets/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/regen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
-#echo "--RWTH-small gen--"
-#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/gen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 150 --n_classes 13 --dims 64
-#echo "--RWTH-small mixgen--"
-#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/mixgen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 150 --n_classes 13 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
-#echo "--RWTH-small reggen--"
-#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 /mnt/sda2/datasets/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/regen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 150 --n_classes 13 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
-
-
-# ENTRENAR ESTO DESPUES tambien!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#python src/classify.py --train_mode gen --imagenet_weights -sm --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/datasets/generated/ReACGAN-ADC-DiffAug-train-2022_09_02_12_25_29/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/gen/RWTH-ReACGAN/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64
 #echo "--RWTH gen--"
-#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/rwth/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/gen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64
+#python src/classify.py --train_mode gen --imagenet_weights --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/datasets/generated/RWTH-SPADE-hagridmodel-train-2023_06_09_14_37_21/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/gen/RWTH-SPADE-hagridmodel/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64
 #echo "--RWTH mixgen--"
-#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/rwth/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/mixgen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
+#python src/classify.py --train_mode mixgen --imagenet_weights --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/datasets/generated/RWTH-SPADE-hagridmodel-train-2023_06_09_14_37_21/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/mixgen/RWTH-SPADE-hagridmodel/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
 #echo "--RWTH reggen--"
-#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/rwth/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/rwth/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/regen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
+#python src/classify.py --train_mode reggen --imagenet_weights --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/datasets/generated/RWTH-SPADE-hagridmodel-train-2023_06_09_14_37_21/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/regen/RWTH-SPADE-hagridmodel/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
+#echo "--Hagrid gen--"
+#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/static-sl/hagrid-complete/ --dset2 /mnt/sda2/datasets/generated/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/gen/hagrid-complete-SPADE/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64
+#echo "--Hagrid mixgen--"
+#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/static-sl/hagrid-complete/ --dset2 /mnt/sda2/datasets/generated/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/mixgen/hagrid-complete-SPADE/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
+#echo "--Hagrid reggen--"
+#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/static-sl/hagrid-complete/ --dset2 /mnt/sda2/datasets/generated/hagrid-complete-SPADE-train-2023_06_09_14_37_21/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/regen/hagrid-complete-SPADE/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
+#echo "--RWTH-small gen--"
+#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/static-sl/rwth-small/ --dset2 /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03 --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/gen/RWTH-small-SPADE/ --num_workers 4 --epochs 150 --n_classes 13 --dims 64
+#echo "--RWTH-small mixgen--"
+#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/static-sl/rwth-small/ --dset2 /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03 --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/mixgen/RWTH-small-SPADE/ --num_workers 4 --epochs 150 --n_classes 13 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
+#echo "--RWTH-small reggen--"
+#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/static-sl/rwth-small/ --dset2 /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03 --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/regen/RWTH-small-SPADE/ --num_workers 4 --epochs 150 --n_classes 13 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
+
+#echo "--RWTH gen--"
+#python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/rwth/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/gen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64
+#echo "--RWTH mixgen--"
+#python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/rwth/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/mixgen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0. --reg_beta 0.04 --growth
+#echo "--RWTH reggen--"
+#python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/static-sl/rwth/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/rwth/RWTH-ReACGAN-ADC-DiffAug-train-2022_09_20_22_26_52/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/regen/RWTH-ReACGAN-ADC-DiffAug/ --num_workers 4 --epochs 100 --n_classes 39 --dims 64 --reg_alpha 0.5 --reg_beta 0.04
 #echo "--Hagrid topk gen--"
 #python src/classify.py --train_mode gen --dset1 /mnt/sda2/datasets/hagrid-complete/ --dset2 /mnt/sda2/old_home/grios/classifier_results/real/hagrid-complete/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/gen/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 10 --n_classes 18 --dims 64
 #echo "--Hagrid topk mixgen--"
@@ -111,7 +122,7 @@ python src/main.py -t -hdf5 -hdf5_val -batch_stat -metrics is fid prdc -ref "val
 
 # Train classifier with top k samples and test reg alpha beta
 #echo "--real training--"
-#python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 ./classifier_results/real/rwth-small/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/real/topk-rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 100 --n_classes 13 --dims 64
+#python src/classify.py --train_mode real --dset1 /mnt/sda2/datasets/static-sl/rwth-small/ --batch_size 128 -save /mnt/sda2/models/TDG/classifier_results/real/topk-rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 100 --n_classes 13 --dims 64
 #echo "--train classifier decay alpha 1 beta 0.04--"
 #echo "--mixup decay alpha 1 beta 0.04--"
 #python src/classify.py --train_mode mixgen --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 ./classifier_results/real/rwth-small/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 128 -save /mnt/sda2/old_home/grios/classifier_results/mixgen-d-a1-b04/topk-rwth-small-ReACGAN-ADC-DiffAug-highcond-d-a1-b04/ --num_workers 4 --epochs 100 --n_classes 13 --dims 64 --reg_alpha 1. --reg_beta 0.04
@@ -182,4 +193,30 @@ python src/main.py -t -hdf5 -hdf5_val -batch_stat -metrics is fid prdc -ref "val
 #python src/classify.py --train_mode reggen --dset1 /mnt/sda2/datasets/rwth-small/ --dset2 ./classifier_results/real/rwth-small/rwth-small-ReACGAN-ADC-DiffAug-highcond/ --batch_size 10 -save ./classifier_results/regen-20/topk-rwth-small-ReACGAN-ADC-DiffAug-highcond/ --num_workers 4 --epochs 50 --n_classes 13 --dims 64 --dset_used 20
 
 # Confusion matrix
-#python src/classify.py -cm -lm ./classifier_results/real/hagrid-complete/model_state_dict.pt --dset1 /mnt/sda2/datasets/hagrid-complete/data/ --dset2 /mnt/sda2/datasets/hagrid-complete-ReACGAN-ADC-DiffAug-train-2022_10_28_03_00_38 -save ./classifier_results/real/hagrid-complete/ --batch_size 128 --num_workers 4 --n_classes 18 --dims 64
+#python src/classify.py -cm -lm /mnt/sda2/models/TDG/classifier_results/real/rwth/model_state_dict.pt --dset1 /mnt/sda2/datasets/static-sl/rwth/ -save /mnt/sda2/models/TDG/classifier_results/real/rwth/ --batch_size 128 --num_workers 4 --n_classes 39 --dims 64
+#echo "--Confusion matrix real--"
+#python src/classify.py -cm -lm /mnt/sda2/models/TDG/classifier_results/real/rwth/model_state_dict.pt --dset1 /mnt/sda2/datasets/static-sl/rwth/ -save /mnt/sda2/models/TDG/classifier_results/real/rwth/ --batch_size 128 --num_workers 4 --n_classes 39 --dims 64
+#echo "--Confusion matrix generated--"
+#python src/classify.py -cm -lm /mnt/sda2/models/TDG/classifier_results/gen/RWTH-ReACGAN/model_state_dict.pt --dset1 /mnt/sda2/datasets/static-sl/rwth/ -save /mnt/sda2/models/TDG/classifier_results/gen/RWTH-ReACGAN/ --batch_size 128 --num_workers 4 --n_classes 39 --dims 64
+
+# Class accuracy
+#echo "--Class accuracy real--"
+#python src/classify.py --class_accuracy -lm ./classifier_results/real/rwth/model_state_dict.pt --dset1 /mnt/sda2/datasets/static-sl/rwth/ -save /mnt/sda2/models/TDG/classifier_results/real/rwth/ --batch_size 128 --num_workers 4 --n_classes 39 --dims 64
+#echo "--Class accuracy generated--"
+#python src/classify.py --class_accuracy -lm /mnt/sda2/models/TDG/classifier_results/gen/RWTH-ReACGAN/model_state_dict.pt --dset1 /mnt/sda2/datasets/static-sl/rwth/ -save /mnt/sda2/models/TDG/classifier_results/gen/RWTH-ReACGAN/ --batch_size 128 --num_workers 4 --n_classes 39 --dims 64
+
+
+#mkdir -p /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/0/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/0/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/35/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/1/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/6/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/2/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/16/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/3/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/8/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/4/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/34/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/5/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/5/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/6/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/26/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/7/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/10/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/8/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/23/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/9/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/2/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/10/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/1/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/11/
+#cp -r /mnt/sda2/datasets/generated/rwth-SPADE-train-2022_06_27_16_44_03/train/7/ /mnt/sda2/datasets/generated/rwth-small-SPADE-train-2022_06_27_16_44_03/train/12/

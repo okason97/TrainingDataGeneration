@@ -69,11 +69,11 @@ class PoseFolder(Dataset):
             else:
                 return self.load_keypoints(lh_keypoints, shape)
         else:
-            return torch.zeros((self.n_keypoints, shape[0], shape[1]))
+            return torch.zeros((self.n_keypoints, shape[1], shape[0]))
 
     def load_keypoints(self, keypoints, shape):
         if self.skeleton:
-            sample = np.zeros((self.n_keypoints, shape[0], shape[1]))
+            sample = np.zeros((self.n_keypoints, shape[1], shape[0]))
             for i in range(5):
                 x0 = np.clip(int(keypoints[0]), 0, shape[0]-1)
                 y0 = np.clip(int(keypoints[1]), 0, shape[1]-1)
@@ -88,7 +88,7 @@ class PoseFolder(Dataset):
         else:
             x, y = np.mgrid[0:shape[0]:1, 0:shape[1]:1]
             pos = np.dstack((x, y))
-            sample = torch.zeros((self.n_keypoints, shape[0], shape[1]))
+            sample = torch.zeros((self.n_keypoints, shape[1], shape[0]))
             for i in range(self.n_keypoints):
                 kx = shape[0]-keypoints[i*3]
                 ky = keypoints[i*3+1]

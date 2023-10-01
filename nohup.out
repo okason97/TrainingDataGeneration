@@ -1,123 +1,2048 @@
---train RWTH-small SPADE generator--
---train RWTH-small SPADE generator--
---train RWTH-small SPADE skeleton generator--
---train RWTH-small SPADE generator--
---train RWTH-small SPADE generator--
---train RWTH-small SPADE skeleton generator--
---train RWTH-small SPADE skeleton generator--
---train RWTH-small SPADE generator--
---train RWTH-small SPADE generator--
---train RWTH-small SPADE generator--
---train RWTH-small SPADE skeleton generator--
---train hagrid SPADE generator--
---train RWTH-small SPADE skeleton generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
-./scripts: line 13: te/SPADE-skeleton/run0.err: No such file or directory
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
-Terminated
-./scripts: line 13: r: command not found
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
-Terminated
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
-Terminated
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
---train hagrid SPADE generator--
+--RWTH gen--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Size of generated dataset: 39000
+Using imagenet weights.
+Training started
+##############################
+#epoch: 0
+train Loss: 4.1268 Acc: 0.0480
+val Loss: 6.9853 Acc: 0.0345
+##############################
+#epoch: 1
+train Loss: 3.7363 Acc: 0.0507
+val Loss: 3.9690 Acc: 0.0613
+##############################
+#epoch: 2
+train Loss: 3.7072 Acc: 0.0511
+val Loss: 3.7781 Acc: 0.0192
+##############################
+#epoch: 3
+train Loss: 3.6906 Acc: 0.0553
+val Loss: 3.6035 Acc: 0.0441
+##############################
+#epoch: 4
+train Loss: 3.6761 Acc: 0.0617
+val Loss: 3.5646 Acc: 0.0057
+##############################
+#epoch: 5
+train Loss: 3.6630 Acc: 0.0638
+val Loss: 3.5626 Acc: 0.0287
+##############################
+#epoch: 6
+train Loss: 3.6481 Acc: 0.0659
+val Loss: 3.6791 Acc: 0.0077
+##############################
+#epoch: 7
+train Loss: 3.6294 Acc: 0.0736
+val Loss: 3.5967 Acc: 0.0326
+##############################
+#epoch: 8
+train Loss: 3.6170 Acc: 0.0771
+val Loss: 3.6083 Acc: 0.0230
+##############################
+#epoch: 9
+train Loss: 3.6026 Acc: 0.0813
+val Loss: 3.6838 Acc: 0.0057
+##############################
+#epoch: 10
+train Loss: 3.5899 Acc: 0.0839
+val Loss: 3.6614 Acc: 0.0230
+##############################
+#epoch: 11
+train Loss: 3.5794 Acc: 0.0875
+val Loss: 3.6614 Acc: 0.0134
+##############################
+#epoch: 12
+train Loss: 3.5691 Acc: 0.0909
+val Loss: 3.6779 Acc: 0.0172
+##############################
+#epoch: 13
+train Loss: 3.5626 Acc: 0.0927
+val Loss: 3.7243 Acc: 0.0211
+##############################
+#epoch: 14
+train Loss: 3.5496 Acc: 0.0976
+val Loss: 3.7113 Acc: 0.0019
+##############################
+#epoch: 15
+train Loss: 3.5403 Acc: 0.1007
+val Loss: 3.6734 Acc: 0.0192
+##############################
+#epoch: 16
+train Loss: 3.5263 Acc: 0.1035
+val Loss: 3.7255 Acc: 0.0307
+##############################
+#epoch: 17
+train Loss: 3.5248 Acc: 0.1094
+val Loss: 3.8500 Acc: 0.0230
+##############################
+#epoch: 18
+train Loss: 3.5060 Acc: 0.1133
+val Loss: 3.7794 Acc: 0.0211
+##############################
+#epoch: 19
+train Loss: 3.4997 Acc: 0.1181
+val Loss: 3.7518 Acc: 0.0287
+##############################
+#epoch: 20
+train Loss: 3.4864 Acc: 0.1226
+val Loss: 3.8113 Acc: 0.0192
+##############################
+#epoch: 21
+train Loss: 3.4764 Acc: 0.1260
+val Loss: 3.7407 Acc: 0.0134
+##############################
+#epoch: 22
+train Loss: 3.4644 Acc: 0.1328
+val Loss: 3.8245 Acc: 0.0192
+##############################
+#epoch: 23
+train Loss: 3.4502 Acc: 0.1373
+val Loss: 3.9419 Acc: 0.0115
+##############################
+#epoch: 24
+train Loss: 3.4406 Acc: 0.1401
+val Loss: 4.0142 Acc: 0.0134
+##############################
+#epoch: 0
+train Loss: 3.3566 Acc: 0.1958
+val Loss: 2.6872 Acc: 0.3161
+##############################
+#epoch: 1
+train Loss: 2.5517 Acc: 0.4555
+val Loss: 2.0070 Acc: 0.4962
+##############################
+#epoch: 2
+train Loss: 2.2946 Acc: 0.5675
+val Loss: 1.7672 Acc: 0.5268
+##############################
+#epoch: 3
+train Loss: 2.1914 Acc: 0.6296
+val Loss: 1.5877 Acc: 0.6552
+##############################
+#epoch: 4
+train Loss: 2.0289 Acc: 0.6961
+val Loss: 1.2390 Acc: 0.7126
+##############################
+#epoch: 5
+train Loss: 1.9766 Acc: 0.7370
+val Loss: 1.2341 Acc: 0.7280
+##############################
+#epoch: 6
+train Loss: 1.8499 Acc: 0.7447
+val Loss: 1.0631 Acc: 0.7682
+##############################
+#epoch: 7
+train Loss: 1.8211 Acc: 0.7652
+val Loss: 1.0203 Acc: 0.7586
+##############################
+#epoch: 8
+train Loss: 1.7984 Acc: 0.7985
+val Loss: 0.9660 Acc: 0.7950
+##############################
+#epoch: 9
+train Loss: 1.6708 Acc: 0.8061
+val Loss: 0.9506 Acc: 0.7950
+##############################
+#epoch: 10
+train Loss: 1.6807 Acc: 0.8177
+val Loss: 0.8962 Acc: 0.8008
+##############################
+#epoch: 11
+train Loss: 1.7046 Acc: 0.8164
+val Loss: 0.9033 Acc: 0.8103
+##############################
+#epoch: 12
+train Loss: 1.6734 Acc: 0.8157
+val Loss: 0.8809 Acc: 0.8180
+##############################
+#epoch: 13
+train Loss: 1.5676 Acc: 0.8631
+val Loss: 0.8460 Acc: 0.8218
+##############################
+#epoch: 14
+train Loss: 1.5443 Acc: 0.8535
+val Loss: 0.8158 Acc: 0.8238
+##############################
+#epoch: 15
+train Loss: 1.5170 Acc: 0.8592
+val Loss: 0.7830 Acc: 0.8276
+##############################
+#epoch: 16
+train Loss: 1.5098 Acc: 0.8759
+val Loss: 0.8077 Acc: 0.8276
+##############################
+#epoch: 17
+train Loss: 1.3999 Acc: 0.8804
+val Loss: 0.7266 Acc: 0.8487
+##############################
+#epoch: 18
+train Loss: 1.4442 Acc: 0.8816
+val Loss: 0.7235 Acc: 0.8410
+##############################
+#epoch: 19
+train Loss: 1.4129 Acc: 0.8880
+val Loss: 0.7257 Acc: 0.8410
+##############################
+#epoch: 20
+train Loss: 1.3757 Acc: 0.9015
+val Loss: 0.7424 Acc: 0.8448
+##############################
+#epoch: 21
+train Loss: 1.3571 Acc: 0.8976
+val Loss: 0.7132 Acc: 0.8372
+##############################
+#epoch: 22
+train Loss: 1.3440 Acc: 0.9079
+val Loss: 0.7133 Acc: 0.8467
+##############################
+#epoch: 23
+train Loss: 1.3069 Acc: 0.9130
+val Loss: 0.6779 Acc: 0.8391
+##############################
+#epoch: 24
+train Loss: 1.3267 Acc: 0.9091
+val Loss: 0.7262 Acc: 0.8314
+##############################
+#epoch: 25
+train Loss: 1.3498 Acc: 0.9002
+val Loss: 0.7211 Acc: 0.8372
+##############################
+#epoch: 26
+train Loss: 1.2708 Acc: 0.9213
+val Loss: 0.7165 Acc: 0.8429
+##############################
+#epoch: 27
+train Loss: 1.2978 Acc: 0.9175
+val Loss: 0.7095 Acc: 0.8448
+##############################
+#epoch: 28
+train Loss: 1.2105 Acc: 0.9232
+val Loss: 0.6831 Acc: 0.8544
+##############################
+#epoch: 29
+train Loss: 1.2149 Acc: 0.9431
+val Loss: 0.6794 Acc: 0.8410
+##############################
+#epoch: 30
+train Loss: 1.1899 Acc: 0.9360
+val Loss: 0.6664 Acc: 0.8506
+##############################
+#epoch: 31
+train Loss: 1.2289 Acc: 0.9232
+val Loss: 0.7187 Acc: 0.8487
+##############################
+#epoch: 32
+train Loss: 1.2356 Acc: 0.9328
+val Loss: 0.6769 Acc: 0.8544
+##############################
+#epoch: 33
+train Loss: 1.2133 Acc: 0.9296
+val Loss: 0.6883 Acc: 0.8582
+##############################
+#epoch: 34
+train Loss: 1.2104 Acc: 0.9367
+val Loss: 0.6628 Acc: 0.8506
+##############################
+#epoch: 35
+train Loss: 1.2032 Acc: 0.9347
+val Loss: 0.6807 Acc: 0.8602
+##############################
+#epoch: 36
+train Loss: 1.1014 Acc: 0.9520
+val Loss: 0.6539 Acc: 0.8582
+##############################
+#epoch: 37
+train Loss: 1.1834 Acc: 0.9296
+val Loss: 0.6477 Acc: 0.8640
+##############################
+#epoch: 38
+train Loss: 1.1310 Acc: 0.9341
+val Loss: 0.6764 Acc: 0.8640
+##############################
+#epoch: 39
+train Loss: 1.1519 Acc: 0.9379
+val Loss: 0.6706 Acc: 0.8563
+##############################
+#epoch: 40
+train Loss: 1.1249 Acc: 0.9379
+val Loss: 0.6757 Acc: 0.8544
+##############################
+#epoch: 41
+train Loss: 1.1306 Acc: 0.9475
+val Loss: 0.6802 Acc: 0.8544
+##############################
+#epoch: 42
+train Loss: 1.1150 Acc: 0.9501
+val Loss: 0.6791 Acc: 0.8678
+##############################
+#epoch: 43
+train Loss: 1.1101 Acc: 0.9469
+val Loss: 0.6723 Acc: 0.8640
+##############################
+#epoch: 44
+train Loss: 1.1098 Acc: 0.9424
+val Loss: 0.6769 Acc: 0.8544
+##############################
+#epoch: 45
+train Loss: 1.1267 Acc: 0.9399
+val Loss: 0.6868 Acc: 0.8563
+##############################
+#epoch: 46
+train Loss: 1.0788 Acc: 0.9450
+val Loss: 0.6263 Acc: 0.8487
+##############################
+#epoch: 47
+train Loss: 1.0970 Acc: 0.9399
+val Loss: 0.6567 Acc: 0.8467
+##############################
+#epoch: 48
+train Loss: 1.0402 Acc: 0.9591
+val Loss: 0.6337 Acc: 0.8506
+##############################
+#epoch: 49
+train Loss: 1.0704 Acc: 0.9571
+val Loss: 0.6544 Acc: 0.8582
+##############################
+#epoch: 50
+train Loss: 1.0369 Acc: 0.9527
+val Loss: 0.6595 Acc: 0.8410
+##############################
+#epoch: 51
+train Loss: 1.0517 Acc: 0.9507
+val Loss: 0.6847 Acc: 0.8410
+##############################
+#epoch: 52
+train Loss: 1.0668 Acc: 0.9469
+val Loss: 0.6841 Acc: 0.8467
+##############################
+#epoch: 53
+train Loss: 1.0631 Acc: 0.9488
+val Loss: 0.6818 Acc: 0.8525
+##############################
+#epoch: 54
+train Loss: 1.0407 Acc: 0.9527
+val Loss: 0.6901 Acc: 0.8391
+##############################
+#epoch: 55
+train Loss: 1.0088 Acc: 0.9616
+val Loss: 0.6614 Acc: 0.8582
+##############################
+#epoch: 56
+train Loss: 1.0080 Acc: 0.9629
+val Loss: 0.6638 Acc: 0.8582
+##############################
+#epoch: 57
+train Loss: 1.0425 Acc: 0.9450
+val Loss: 0.6492 Acc: 0.8602
+##############################
+#epoch: 58
+train Loss: 1.0046 Acc: 0.9616
+val Loss: 0.6725 Acc: 0.8448
+##############################
+#epoch: 59
+train Loss: 1.0387 Acc: 0.9655
+val Loss: 0.6713 Acc: 0.8487
+##############################
+#epoch: 60
+train Loss: 0.9990 Acc: 0.9565
+val Loss: 0.6527 Acc: 0.8563
+##############################
+#epoch: 61
+train Loss: 0.9598 Acc: 0.9565
+val Loss: 0.6617 Acc: 0.8506
+##############################
+#epoch: 62
+train Loss: 0.9590 Acc: 0.9597
+val Loss: 0.6498 Acc: 0.8448
+##############################
+#epoch: 63
+train Loss: 0.9357 Acc: 0.9610
+val Loss: 0.6718 Acc: 0.8410
+##############################
+#epoch: 64
+train Loss: 0.9864 Acc: 0.9661
+val Loss: 0.6661 Acc: 0.8410
+##############################
+#epoch: 65
+train Loss: 0.9601 Acc: 0.9648
+val Loss: 0.6720 Acc: 0.8467
+##############################
+#epoch: 66
+train Loss: 0.9824 Acc: 0.9616
+val Loss: 0.6382 Acc: 0.8525
+##############################
+#epoch: 67
+train Loss: 0.9587 Acc: 0.9725
+val Loss: 0.6845 Acc: 0.8563
+##############################
+#epoch: 68
+train Loss: 0.9599 Acc: 0.9674
+val Loss: 0.6812 Acc: 0.8448
+##############################
+#epoch: 69
+train Loss: 0.9645 Acc: 0.9623
+val Loss: 0.6505 Acc: 0.8563
+##############################
+#epoch: 70
+train Loss: 0.9566 Acc: 0.9552
+val Loss: 0.6632 Acc: 0.8506
+##############################
+#epoch: 71
+train Loss: 0.9561 Acc: 0.9629
+val Loss: 0.6372 Acc: 0.8506
+##############################
+#epoch: 72
+train Loss: 0.9573 Acc: 0.9571
+val Loss: 0.6712 Acc: 0.8525
+##############################
+#epoch: 73
+train Loss: 0.9506 Acc: 0.9610
+val Loss: 0.6439 Acc: 0.8544
+##############################
+#epoch: 74
+train Loss: 0.9596 Acc: 0.9603
+val Loss: 0.6589 Acc: 0.8372
+##############################
+#epoch: 75
+train Loss: 0.9435 Acc: 0.9661
+val Loss: 0.6464 Acc: 0.8487
+##############################
+#epoch: 76
+train Loss: 0.9241 Acc: 0.9661
+val Loss: 0.6508 Acc: 0.8525
+##############################
+#epoch: 77
+train Loss: 0.9388 Acc: 0.9661
+val Loss: 0.6262 Acc: 0.8678
+##############################
+#epoch: 78
+train Loss: 0.9259 Acc: 0.9623
+val Loss: 0.6425 Acc: 0.8410
+##############################
+#epoch: 79
+train Loss: 0.9168 Acc: 0.9680
+val Loss: 0.6350 Acc: 0.8448
+##############################
+#epoch: 80
+train Loss: 0.9121 Acc: 0.9648
+val Loss: 0.6712 Acc: 0.8525
+##############################
+#epoch: 81
+train Loss: 0.9150 Acc: 0.9687
+val Loss: 0.6369 Acc: 0.8467
+##############################
+#epoch: 82
+train Loss: 0.9049 Acc: 0.9635
+val Loss: 0.6509 Acc: 0.8602
+##############################
+#epoch: 83
+train Loss: 0.9089 Acc: 0.9674
+val Loss: 0.6375 Acc: 0.8525
+##############################
+#epoch: 84
+train Loss: 0.9092 Acc: 0.9712
+val Loss: 0.6732 Acc: 0.8467
+##############################
+#epoch: 85
+train Loss: 0.8825 Acc: 0.9655
+val Loss: 0.6742 Acc: 0.8429
+##############################
+#epoch: 86
+train Loss: 0.8817 Acc: 0.9674
+val Loss: 0.6547 Acc: 0.8391
+##############################
+#epoch: 87
+train Loss: 0.8726 Acc: 0.9718
+val Loss: 0.6348 Acc: 0.8487
+##############################
+#epoch: 88
+train Loss: 0.8660 Acc: 0.9610
+val Loss: 0.6322 Acc: 0.8582
+##############################
+#epoch: 89
+train Loss: 0.8611 Acc: 0.9731
+val Loss: 0.6443 Acc: 0.8487
+##############################
+#epoch: 90
+train Loss: 0.8686 Acc: 0.9712
+val Loss: 0.6494 Acc: 0.8563
+##############################
+#epoch: 91
+train Loss: 0.8838 Acc: 0.9661
+val Loss: 0.6177 Acc: 0.8525
+##############################
+#epoch: 92
+train Loss: 0.8807 Acc: 0.9731
+val Loss: 0.6358 Acc: 0.8563
+##############################
+#epoch: 93
+train Loss: 0.8693 Acc: 0.9712
+val Loss: 0.6161 Acc: 0.8602
+##############################
+#epoch: 94
+train Loss: 0.8722 Acc: 0.9648
+val Loss: 0.6624 Acc: 0.8525
+##############################
+#epoch: 95
+train Loss: 0.8782 Acc: 0.9718
+val Loss: 0.6396 Acc: 0.8525
+##############################
+#epoch: 96
+train Loss: 0.8684 Acc: 0.9693
+val Loss: 0.6443 Acc: 0.8448
+##############################
+#epoch: 97
+train Loss: 0.8770 Acc: 0.9744
+val Loss: 0.6730 Acc: 0.8563
+##############################
+#epoch: 98
+train Loss: 0.8404 Acc: 0.9738
+val Loss: 0.6751 Acc: 0.8467
+##############################
+#epoch: 99
+train Loss: 0.8470 Acc: 0.9782
+val Loss: 0.6241 Acc: 0.8563
+Testing started
+Test Loss: 0.7137 Acc: 0.8592
+--RWTH gen--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Size of generated dataset: 39000
+Using imagenet weights.
+Training started
+##############################
+#epoch: 0
+train Loss: 4.1403 Acc: 0.0475
+val Loss: 7.8072 Acc: 0.0211
+##############################
+#epoch: 1
+train Loss: 3.7350 Acc: 0.0495
+val Loss: 4.0271 Acc: 0.0038
+##############################
+#epoch: 2
+train Loss: 3.7113 Acc: 0.0519
+val Loss: 3.6946 Acc: 0.0077
+##############################
+#epoch: 3
+train Loss: 3.7005 Acc: 0.0503
+val Loss: 3.6319 Acc: 0.0096
+##############################
+#epoch: 4
+train Loss: 3.6930 Acc: 0.0513
+val Loss: 3.7029 Acc: 0.0096
+##############################
+#epoch: 5
+train Loss: 3.6904 Acc: 0.0521
+val Loss: 3.7285 Acc: 0.0153
+##############################
+#epoch: 6
+train Loss: 3.6858 Acc: 0.0532
+val Loss: 3.7967 Acc: 0.0115
+##############################
+#epoch: 7
+train Loss: 3.6780 Acc: 0.0541
+val Loss: 3.6680 Acc: 0.0230
+##############################
+#epoch: 8
+train Loss: 3.6753 Acc: 0.0566
+val Loss: 3.6772 Acc: 0.0077
+##############################
+#epoch: 9
+train Loss: 3.6655 Acc: 0.0585
+val Loss: 3.6643 Acc: 0.0153
+##############################
+#epoch: 10
+train Loss: 3.6576 Acc: 0.0678
+val Loss: 5.3477 Acc: 0.0287
+##############################
+#epoch: 11
+train Loss: 3.6462 Acc: 0.0736
+val Loss: 8.8401 Acc: 0.0019
+##############################
+#epoch: 12
+train Loss: 3.6346 Acc: 0.0787
+val Loss: 3.7050 Acc: 0.0594
+##############################
+#epoch: 13
+train Loss: 3.6201 Acc: 0.0848
+val Loss: 3.9834 Acc: 0.0268
+##############################
+#epoch: 14
+train Loss: 3.6025 Acc: 0.0963
+val Loss: 3.7736 Acc: 0.0536
+##############################
+#epoch: 15
+train Loss: 3.5850 Acc: 0.1078
+val Loss: 4.0477 Acc: 0.0153
+##############################
+#epoch: 16
+train Loss: 3.5639 Acc: 0.1154
+val Loss: 8.5489 Acc: 0.0096
+##############################
+#epoch: 17
+train Loss: 3.5428 Acc: 0.1278
+val Loss: 9.6788 Acc: 0.0517
+##############################
+#epoch: 18
+train Loss: 3.5238 Acc: 0.1351
+val Loss: 3.5114 Acc: 0.0326
+##############################
+#epoch: 19
+train Loss: 3.4978 Acc: 0.1468
+val Loss: 3.5232 Acc: 0.0326
+##############################
+#epoch: 20
+train Loss: 3.4787 Acc: 0.1591
+val Loss: 3.5408 Acc: 0.0192
+##############################
+#epoch: 21
+train Loss: 3.4536 Acc: 0.1774
+val Loss: 3.5406 Acc: 0.0249
+##############################
+#epoch: 22
+train Loss: 3.4266 Acc: 0.1913
+val Loss: 3.6000 Acc: 0.0326
+##############################
+#epoch: 23
+train Loss: 3.3977 Acc: 0.2063
+val Loss: 3.6320 Acc: 0.0153
+##############################
+#epoch: 24
+train Loss: 3.3643 Acc: 0.2241
+val Loss: 3.6566 Acc: 0.0249
+##############################
+#epoch: 0
+train Loss: 3.2988 Acc: 0.2687
+val Loss: 2.4066 Acc: 0.4004
+##############################
+#epoch: 1
+train Loss: 2.5303 Acc: 0.5061
+val Loss: 1.8842 Acc: 0.5843
+##############################
+#epoch: 2
+train Loss: 2.2873 Acc: 0.5976
+val Loss: 1.5635 Acc: 0.6149
+##############################
+#epoch: 3
+train Loss: 2.1792 Acc: 0.6494
+val Loss: 1.2613 Acc: 0.7107
+##############################
+#epoch: 4
+train Loss: 2.0426 Acc: 0.6827
+val Loss: 1.1827 Acc: 0.7126
+##############################
+#epoch: 5
+train Loss: 1.9824 Acc: 0.7281
+val Loss: 1.1002 Acc: 0.7548
+##############################
+#epoch: 6
+train Loss: 1.9744 Acc: 0.7396
+val Loss: 1.1697 Acc: 0.7433
+##############################
+#epoch: 7
+train Loss: 1.8854 Acc: 0.7511
+val Loss: 0.8609 Acc: 0.7950
+##############################
+#epoch: 8
+train Loss: 1.8466 Acc: 0.7614
+val Loss: 0.8658 Acc: 0.7816
+##############################
+#epoch: 9
+train Loss: 1.7904 Acc: 0.7869
+val Loss: 0.8819 Acc: 0.7778
+##############################
+#epoch: 10
+train Loss: 1.7928 Acc: 0.7780
+val Loss: 0.8333 Acc: 0.7989
+##############################
+#epoch: 11
+train Loss: 1.7053 Acc: 0.8049
+val Loss: 0.8109 Acc: 0.8084
+##############################
+#epoch: 12
+train Loss: 1.6588 Acc: 0.8311
+val Loss: 0.7726 Acc: 0.8103
+##############################
+#epoch: 13
+train Loss: 1.7285 Acc: 0.7901
+val Loss: 0.7925 Acc: 0.8103
+##############################
+#epoch: 14
+train Loss: 1.6049 Acc: 0.8305
+val Loss: 0.7427 Acc: 0.8257
+##############################
+#epoch: 15
+train Loss: 1.5813 Acc: 0.8477
+val Loss: 0.6983 Acc: 0.8218
+##############################
+#epoch: 16
+train Loss: 1.5157 Acc: 0.8644
+val Loss: 0.6866 Acc: 0.8333
+##############################
+#epoch: 17
+train Loss: 1.5034 Acc: 0.8669
+val Loss: 0.7179 Acc: 0.8276
+##############################
+#epoch: 18
+train Loss: 1.4897 Acc: 0.8516
+val Loss: 0.7055 Acc: 0.8218
+##############################
+#epoch: 19
+train Loss: 1.5385 Acc: 0.8560
+val Loss: 0.7220 Acc: 0.8199
+##############################
+#epoch: 20
+train Loss: 1.4274 Acc: 0.8906
+val Loss: 0.6761 Acc: 0.8410
+##############################
+#epoch: 21
+train Loss: 1.4780 Acc: 0.8663
+val Loss: 0.6834 Acc: 0.8391
+##############################
+#epoch: 22
+train Loss: 1.4568 Acc: 0.8778
+val Loss: 0.6632 Acc: 0.8525
+##############################
+#epoch: 23
+train Loss: 1.5072 Acc: 0.8669
+val Loss: 0.6417 Acc: 0.8467
+##############################
+#epoch: 24
+train Loss: 1.2666 Acc: 0.9091
+val Loss: 0.6077 Acc: 0.8429
+##############################
+#epoch: 25
+train Loss: 1.4003 Acc: 0.8957
+val Loss: 0.6472 Acc: 0.8372
+##############################
+#epoch: 26
+train Loss: 1.3337 Acc: 0.9079
+val Loss: 0.6480 Acc: 0.8429
+##############################
+#epoch: 27
+train Loss: 1.4288 Acc: 0.8791
+val Loss: 0.6374 Acc: 0.8467
+##############################
+#epoch: 28
+train Loss: 1.3746 Acc: 0.8970
+val Loss: 0.6518 Acc: 0.8525
+##############################
+#epoch: 29
+train Loss: 1.3276 Acc: 0.9066
+val Loss: 0.6637 Acc: 0.8391
+##############################
+#epoch: 30
+train Loss: 1.3019 Acc: 0.9258
+val Loss: 0.6501 Acc: 0.8429
+##############################
+#epoch: 31
+train Loss: 1.3503 Acc: 0.9091
+val Loss: 0.6801 Acc: 0.8487
+##############################
+#epoch: 32
+train Loss: 1.3589 Acc: 0.8996
+val Loss: 0.6539 Acc: 0.8448
+##############################
+#epoch: 33
+train Loss: 1.2798 Acc: 0.9149
+val Loss: 0.6410 Acc: 0.8487
+##############################
+#epoch: 34
+train Loss: 1.2394 Acc: 0.9232
+val Loss: 0.6656 Acc: 0.8391
+##############################
+#epoch: 35
+train Loss: 1.2503 Acc: 0.9175
+val Loss: 0.6516 Acc: 0.8525
+##############################
+#epoch: 36
+train Loss: 1.2383 Acc: 0.9111
+val Loss: 0.6601 Acc: 0.8410
+##############################
+#epoch: 37
+train Loss: 1.2850 Acc: 0.9232
+val Loss: 0.6487 Acc: 0.8410
+##############################
+#epoch: 38
+train Loss: 1.2620 Acc: 0.9175
+val Loss: 0.6480 Acc: 0.8429
+##############################
+#epoch: 39
+train Loss: 1.2615 Acc: 0.9245
+val Loss: 0.6733 Acc: 0.8410
+##############################
+#epoch: 40
+train Loss: 1.2542 Acc: 0.9168
+val Loss: 0.6529 Acc: 0.8467
+##############################
+#epoch: 41
+train Loss: 1.2172 Acc: 0.9341
+val Loss: 0.6268 Acc: 0.8525
+##############################
+#epoch: 42
+train Loss: 1.1878 Acc: 0.9360
+val Loss: 0.6285 Acc: 0.8506
+##############################
+#epoch: 43
+train Loss: 1.2015 Acc: 0.9386
+val Loss: 0.6486 Acc: 0.8487
+##############################
+#epoch: 44
+train Loss: 1.1747 Acc: 0.9399
+val Loss: 0.6592 Acc: 0.8544
+##############################
+#epoch: 45
+train Loss: 1.1946 Acc: 0.9322
+val Loss: 0.6619 Acc: 0.8467
+##############################
+#epoch: 46
+train Loss: 1.1819 Acc: 0.9373
+val Loss: 0.6166 Acc: 0.8563
+##############################
+#epoch: 47
+train Loss: 1.1408 Acc: 0.9418
+val Loss: 0.6524 Acc: 0.8582
+##############################
+#epoch: 48
+train Loss: 1.1736 Acc: 0.9354
+val Loss: 0.6241 Acc: 0.8582
+##############################
+#epoch: 49
+train Loss: 1.0988 Acc: 0.9456
+val Loss: 0.6133 Acc: 0.8525
+##############################
+#epoch: 50
+train Loss: 1.1508 Acc: 0.9341
+val Loss: 0.6288 Acc: 0.8563
+##############################
+#epoch: 51
+train Loss: 1.1437 Acc: 0.9309
+val Loss: 0.6510 Acc: 0.8563
+##############################
+#epoch: 52
+train Loss: 1.1197 Acc: 0.9501
+val Loss: 0.6105 Acc: 0.8544
+##############################
+#epoch: 53
+train Loss: 1.1342 Acc: 0.9424
+val Loss: 0.6646 Acc: 0.8429
+##############################
+#epoch: 54
+train Loss: 1.1242 Acc: 0.9431
+val Loss: 0.6860 Acc: 0.8448
+##############################
+#epoch: 55
+train Loss: 1.0949 Acc: 0.9411
+val Loss: 0.6440 Acc: 0.8544
+##############################
+#epoch: 56
+train Loss: 1.1081 Acc: 0.9463
+val Loss: 0.6279 Acc: 0.8582
+##############################
+#epoch: 57
+train Loss: 1.0802 Acc: 0.9514
+val Loss: 0.6533 Acc: 0.8506
+##############################
+#epoch: 58
+train Loss: 1.0986 Acc: 0.9360
+val Loss: 0.6333 Acc: 0.8525
+##############################
+#epoch: 59
+train Loss: 1.0760 Acc: 0.9578
+val Loss: 0.6175 Acc: 0.8448
+##############################
+#epoch: 60
+train Loss: 1.0720 Acc: 0.9520
+val Loss: 0.6149 Acc: 0.8602
+##############################
+#epoch: 61
+train Loss: 1.0949 Acc: 0.9456
+val Loss: 0.6577 Acc: 0.8410
+##############################
+#epoch: 62
+train Loss: 1.0929 Acc: 0.9463
+val Loss: 0.6409 Acc: 0.8602
+##############################
+#epoch: 63
+train Loss: 1.0209 Acc: 0.9616
+val Loss: 0.6211 Acc: 0.8563
+##############################
+#epoch: 64
+train Loss: 1.0806 Acc: 0.9411
+val Loss: 0.6073 Acc: 0.8544
+##############################
+#epoch: 65
+train Loss: 1.0453 Acc: 0.9552
+val Loss: 0.6190 Acc: 0.8602
+##############################
+#epoch: 66
+train Loss: 0.9544 Acc: 0.9680
+val Loss: 0.5951 Acc: 0.8563
+##############################
+#epoch: 67
+train Loss: 1.0484 Acc: 0.9520
+val Loss: 0.6218 Acc: 0.8697
+##############################
+#epoch: 68
+train Loss: 1.0670 Acc: 0.9520
+val Loss: 0.6139 Acc: 0.8640
+##############################
+#epoch: 69
+train Loss: 1.0416 Acc: 0.9469
+val Loss: 0.6188 Acc: 0.8602
+##############################
+#epoch: 70
+train Loss: 1.0157 Acc: 0.9552
+val Loss: 0.6318 Acc: 0.8621
+##############################
+#epoch: 71
+train Loss: 1.0291 Acc: 0.9616
+val Loss: 0.6070 Acc: 0.8621
+##############################
+#epoch: 72
+train Loss: 0.9941 Acc: 0.9642
+val Loss: 0.6256 Acc: 0.8582
+##############################
+#epoch: 73
+train Loss: 1.0082 Acc: 0.9559
+val Loss: 0.6439 Acc: 0.8544
+##############################
+#epoch: 74
+train Loss: 1.0221 Acc: 0.9578
+val Loss: 0.6314 Acc: 0.8467
+##############################
+#epoch: 75
+train Loss: 1.0045 Acc: 0.9546
+val Loss: 0.6244 Acc: 0.8487
+##############################
+#epoch: 76
+train Loss: 1.0222 Acc: 0.9552
+val Loss: 0.6265 Acc: 0.8467
+##############################
+#epoch: 77
+train Loss: 1.0155 Acc: 0.9635
+val Loss: 0.6340 Acc: 0.8429
+##############################
+#epoch: 78
+train Loss: 0.9881 Acc: 0.9610
+val Loss: 0.6321 Acc: 0.8467
+##############################
+#epoch: 79
+train Loss: 1.0072 Acc: 0.9501
+val Loss: 0.6524 Acc: 0.8429
+##############################
+#epoch: 80
+train Loss: 0.9686 Acc: 0.9680
+val Loss: 0.6170 Acc: 0.8582
+##############################
+#epoch: 81
+train Loss: 0.9589 Acc: 0.9642
+val Loss: 0.6188 Acc: 0.8525
+##############################
+#epoch: 82
+train Loss: 0.9726 Acc: 0.9610
+val Loss: 0.6126 Acc: 0.8544
+##############################
+#epoch: 83
+train Loss: 0.9929 Acc: 0.9584
+val Loss: 0.6188 Acc: 0.8448
+##############################
+#epoch: 84
+train Loss: 0.9540 Acc: 0.9667
+val Loss: 0.6218 Acc: 0.8582
+##############################
+#epoch: 85
+train Loss: 0.9608 Acc: 0.9693
+val Loss: 0.6471 Acc: 0.8448
+##############################
+#epoch: 86
+train Loss: 0.9573 Acc: 0.9629
+val Loss: 0.6039 Acc: 0.8621
+##############################
+#epoch: 87
+train Loss: 0.9560 Acc: 0.9610
+val Loss: 0.6444 Acc: 0.8563
+##############################
+#epoch: 88
+train Loss: 0.9537 Acc: 0.9680
+val Loss: 0.6096 Acc: 0.8640
+##############################
+#epoch: 89
+train Loss: 0.9494 Acc: 0.9642
+val Loss: 0.6145 Acc: 0.8563
+##############################
+#epoch: 90
+train Loss: 0.9319 Acc: 0.9655
+val Loss: 0.6358 Acc: 0.8487
+##############################
+#epoch: 91
+train Loss: 0.9472 Acc: 0.9629
+val Loss: 0.6290 Acc: 0.8506
+##############################
+#epoch: 92
+train Loss: 0.9803 Acc: 0.9591
+val Loss: 0.6297 Acc: 0.8582
+##############################
+#epoch: 93
+train Loss: 0.9163 Acc: 0.9674
+val Loss: 0.6067 Acc: 0.8544
+##############################
+#epoch: 94
+train Loss: 0.8455 Acc: 0.9725
+val Loss: 0.6279 Acc: 0.8525
+##############################
+#epoch: 95
+train Loss: 0.9482 Acc: 0.9693
+val Loss: 0.6438 Acc: 0.8544
+##############################
+#epoch: 96
+train Loss: 0.9338 Acc: 0.9687
+val Loss: 0.6193 Acc: 0.8544
+##############################
+#epoch: 97
+train Loss: 0.8660 Acc: 0.9738
+val Loss: 0.6027 Acc: 0.8506
+##############################
+#epoch: 98
+train Loss: 0.9083 Acc: 0.9655
+val Loss: 0.6477 Acc: 0.8467
+##############################
+#epoch: 99
+train Loss: 0.9247 Acc: 0.9680
+val Loss: 0.6627 Acc: 0.8487
+Testing started
+Test Loss: 0.6635 Acc: 0.8515
+--RWTH mixgen--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Size of generated dataset: 39000
+Using imagenet weights.
+Training started
+##############################
+#epoch: 0
+train Loss: 6.9753 Acc: 0.0141
+val Loss: 6.1498 Acc: 0.0460
+##############################
+#epoch: 1
+train Loss: 5.0547 Acc: 0.0870
+val Loss: 5.0340 Acc: 0.0996
+##############################
+#epoch: 2
+train Loss: 4.3939 Acc: 0.1222
+val Loss: 4.0715 Acc: 0.1073
+##############################
+#epoch: 3
+train Loss: 3.9022 Acc: 0.1631
+val Loss: 3.6223 Acc: 0.1398
+##############################
+#epoch: 4
+train Loss: 3.8349 Acc: 0.1472
+val Loss: 3.6071 Acc: 0.1360
+##############################
+#epoch: 5
+train Loss: 3.6143 Acc: 0.1734
+val Loss: 3.8132 Acc: 0.1092
+##############################
+#epoch: 6
+train Loss: 3.4466 Acc: 0.2131
+val Loss: 3.2289 Acc: 0.1379
+##############################
+#epoch: 7
+train Loss: 3.4319 Acc: 0.1983
+val Loss: 5.1275 Acc: 0.1609
+##############################
+#epoch: 8
+train Loss: 3.3158 Acc: 0.2252
+val Loss: 3.1524 Acc: 0.1418
+##############################
+#epoch: 9
+train Loss: 3.5395 Acc: 0.1887
+val Loss: 12.2077 Acc: 0.1820
+##############################
+#epoch: 10
+train Loss: 3.4400 Acc: 0.2073
+val Loss: 3.9331 Acc: 0.1801
+##############################
+#epoch: 11
+train Loss: 3.3131 Acc: 0.2380
+val Loss: 3.5330 Acc: 0.1418
+##############################
+#epoch: 12
+train Loss: 3.2239 Acc: 0.2476
+val Loss: 2.8744 Acc: 0.2050
+##############################
+#epoch: 13
+train Loss: 3.1508 Acc: 0.2578
+val Loss: 2.7715 Acc: 0.2222
+##############################
+#epoch: 14
+train Loss: 3.3360 Acc: 0.2476
+val Loss: 2.8510 Acc: 0.2165
+##############################
+#epoch: 15
+train Loss: 3.2765 Acc: 0.2662
+val Loss: 2.8759 Acc: 0.2107
+##############################
+#epoch: 16
+train Loss: 3.1671 Acc: 0.2770
+val Loss: 2.8307 Acc: 0.2605
+##############################
+#epoch: 17
+train Loss: 3.0756 Acc: 0.2981
+val Loss: 2.7479 Acc: 0.2529
+##############################
+#epoch: 18
+train Loss: 3.1552 Acc: 0.3052
+val Loss: 2.7069 Acc: 0.2490
+##############################
+#epoch: 19
+train Loss: 3.0630 Acc: 0.3193
+val Loss: 2.6731 Acc: 0.2375
+##############################
+#epoch: 20
+train Loss: 3.1518 Acc: 0.3090
+val Loss: 2.7315 Acc: 0.2433
+##############################
+#epoch: 21
+train Loss: 3.0012 Acc: 0.3436
+val Loss: 2.6271 Acc: 0.3199
+##############################
+#epoch: 22
+train Loss: 2.9354 Acc: 0.3564
+val Loss: 2.5429 Acc: 0.3199
+##############################
+#epoch: 23
+train Loss: 2.8306 Acc: 0.4012
+val Loss: 2.5257 Acc: 0.3333
+##############################
+#epoch: 24
+train Loss: 2.8625 Acc: 0.4101
+val Loss: 2.4549 Acc: 0.3180
+##############################
+#epoch: 25
+train Loss: 2.9599 Acc: 0.3935
+val Loss: 3.0817 Acc: 0.3295
+##############################
+#epoch: 26
+train Loss: 2.9221 Acc: 0.4152
+val Loss: 2.4725 Acc: 0.3391
+##############################
+#epoch: 27
+train Loss: 2.8229 Acc: 0.4063
+val Loss: 2.3522 Acc: 0.3487
+##############################
+#epoch: 28
+train Loss: 2.9813 Acc: 0.4210
+val Loss: 2.3612 Acc: 0.3985
+##############################
+#epoch: 29
+train Loss: 2.7865 Acc: 0.4415
+val Loss: 2.2832 Acc: 0.4023
+##############################
+#epoch: 30
+train Loss: 2.6072 Acc: 0.4843
+val Loss: 2.2108 Acc: 0.4330
+##############################
+#epoch: 31
+train Loss: 2.6345 Acc: 0.4568
+val Loss: 2.1948 Acc: 0.4176
+##############################
+#epoch: 32
+train Loss: 3.0567 Acc: 0.4415
+val Loss: 2.2930 Acc: 0.4004
+##############################
+#epoch: 33
+train Loss: 2.4523 Acc: 0.4901
+val Loss: 2.1538 Acc: 0.4310
+##############################
+#epoch: 34
+train Loss: 2.6115 Acc: 0.5054
+val Loss: 2.1168 Acc: 0.4483
+##############################
+#epoch: 35
+train Loss: 2.3792 Acc: 0.5208
+val Loss: 2.0920 Acc: 0.4291
+##############################
+#epoch: 36
+train Loss: 2.5242 Acc: 0.5304
+val Loss: 2.0576 Acc: 0.4559
+##############################
+#epoch: 37
+train Loss: 2.4191 Acc: 0.5528
+val Loss: 1.9753 Acc: 0.4693
+##############################
+#epoch: 38
+train Loss: 2.6115 Acc: 0.5067
+val Loss: 2.0854 Acc: 0.4693
+##############################
+#epoch: 39
+train Loss: 2.4227 Acc: 0.5528
+val Loss: 1.9143 Acc: 0.4923
+##############################
+#epoch: 40
+train Loss: 2.2965 Acc: 0.5553
+val Loss: 1.8806 Acc: 0.4904
+##############################
+#epoch: 41
+train Loss: 2.4213 Acc: 0.5585
+val Loss: 1.9812 Acc: 0.4598
+##############################
+#epoch: 42
+train Loss: 2.6052 Acc: 0.5477
+val Loss: 1.9554 Acc: 0.5153
+##############################
+#epoch: 43
+train Loss: 2.5027 Acc: 0.5745
+val Loss: 2.0437 Acc: 0.4751
+##############################
+#epoch: 44
+train Loss: 2.6025 Acc: 0.5579
+val Loss: 1.9270 Acc: 0.5268
+##############################
+#epoch: 45
+train Loss: 2.4797 Acc: 0.5931
+val Loss: 1.8512 Acc: 0.5402
+##############################
+#epoch: 46
+train Loss: 2.2978 Acc: 0.5867
+val Loss: 1.7930 Acc: 0.5651
+##############################
+#epoch: 47
+train Loss: 2.4446 Acc: 0.5701
+val Loss: 1.7844 Acc: 0.5345
+##############################
+#epoch: 48
+train Loss: 2.4068 Acc: 0.5745
+val Loss: 1.8289 Acc: 0.5172
+##############################
+#epoch: 49
+train Loss: 2.4760 Acc: 0.6072
+val Loss: 1.8018 Acc: 0.5383
+##############################
+#epoch: 50
+train Loss: 2.1433 Acc: 0.6520
+val Loss: 1.6454 Acc: 0.6015
+##############################
+#epoch: 51
+train Loss: 2.1594 Acc: 0.6443
+val Loss: 1.6081 Acc: 0.5958
+##############################
+#epoch: 52
+train Loss: 2.2637 Acc: 0.6513
+val Loss: 1.6956 Acc: 0.5805
+##############################
+#epoch: 53
+train Loss: 2.1458 Acc: 0.6647
+val Loss: 1.5831 Acc: 0.5977
+##############################
+#epoch: 54
+train Loss: 2.2161 Acc: 0.6481
+val Loss: 1.5825 Acc: 0.6034
+##############################
+#epoch: 55
+train Loss: 2.1704 Acc: 0.6737
+val Loss: 1.5533 Acc: 0.6188
+##############################
+#epoch: 56
+train Loss: 2.1917 Acc: 0.6647
+val Loss: 1.5516 Acc: 0.6092
+##############################
+#epoch: 57
+train Loss: 2.1665 Acc: 0.6801
+val Loss: 1.4803 Acc: 0.6513
+##############################
+#epoch: 58
+train Loss: 2.2788 Acc: 0.6392
+val Loss: 1.5967 Acc: 0.6264
+##############################
+#epoch: 59
+train Loss: 2.1822 Acc: 0.6942
+val Loss: 1.4247 Acc: 0.6398
+##############################
+#epoch: 60
+train Loss: 1.9876 Acc: 0.7108
+val Loss: 1.3664 Acc: 0.6571
+##############################
+#epoch: 61
+train Loss: 1.9120 Acc: 0.7102
+val Loss: 1.4106 Acc: 0.6724
+##############################
+#epoch: 62
+train Loss: 2.4134 Acc: 0.6539
+val Loss: 1.4922 Acc: 0.6284
+##############################
+#epoch: 63
+train Loss: 2.1193 Acc: 0.6993
+val Loss: 1.4089 Acc: 0.6590
+##############################
+#epoch: 64
+train Loss: 2.3086 Acc: 0.6699
+val Loss: 1.4713 Acc: 0.6628
+##############################
+#epoch: 65
+train Loss: 2.0225 Acc: 0.7153
+val Loss: 1.3183 Acc: 0.6935
+##############################
+#epoch: 66
+train Loss: 2.0932 Acc: 0.7223
+val Loss: 1.4039 Acc: 0.6628
+##############################
+#epoch: 67
+train Loss: 1.8627 Acc: 0.7351
+val Loss: 1.3623 Acc: 0.6609
+##############################
+#epoch: 68
+train Loss: 1.8691 Acc: 0.7191
+val Loss: 1.3318 Acc: 0.6820
+##############################
+#epoch: 69
+train Loss: 1.9195 Acc: 0.7370
+val Loss: 1.4641 Acc: 0.6667
+##############################
+#epoch: 70
+train Loss: 2.0431 Acc: 0.7294
+val Loss: 1.3263 Acc: 0.6705
+##############################
+#epoch: 71
+train Loss: 2.1687 Acc: 0.7031
+val Loss: 1.3578 Acc: 0.6743
+##############################
+#epoch: 72
+train Loss: 1.9590 Acc: 0.7294
+val Loss: 1.3480 Acc: 0.6973
+##############################
+#epoch: 73
+train Loss: 1.8989 Acc: 0.7242
+val Loss: 1.2926 Acc: 0.7011
+##############################
+#epoch: 74
+train Loss: 2.0615 Acc: 0.7345
+val Loss: 1.2859 Acc: 0.6973
+##############################
+#epoch: 75
+train Loss: 2.0298 Acc: 0.7409
+val Loss: 1.2626 Acc: 0.7088
+##############################
+#epoch: 76
+train Loss: 1.7670 Acc: 0.7588
+val Loss: 1.1893 Acc: 0.7280
+##############################
+#epoch: 77
+train Loss: 1.8724 Acc: 0.7652
+val Loss: 1.2054 Acc: 0.7299
+##############################
+#epoch: 78
+train Loss: 1.7483 Acc: 0.7767
+val Loss: 1.2008 Acc: 0.7203
+##############################
+#epoch: 79
+train Loss: 1.9960 Acc: 0.7492
+val Loss: 1.1792 Acc: 0.7337
+##############################
+#epoch: 80
+train Loss: 1.7600 Acc: 0.7671
+val Loss: 1.2259 Acc: 0.7107
+##############################
+#epoch: 81
+train Loss: 2.2169 Acc: 0.7422
+val Loss: 1.2630 Acc: 0.7050
+##############################
+#epoch: 82
+train Loss: 1.7706 Acc: 0.7818
+val Loss: 1.1295 Acc: 0.7395
+##############################
+#epoch: 83
+train Loss: 1.7506 Acc: 0.7850
+val Loss: 1.1091 Acc: 0.7184
+##############################
+#epoch: 84
+train Loss: 1.9289 Acc: 0.7767
+val Loss: 1.1914 Acc: 0.7299
+##############################
+#epoch: 85
+train Loss: 1.8275 Acc: 0.7818
+val Loss: 1.1293 Acc: 0.7356
+##############################
+#epoch: 86
+train Loss: 1.7682 Acc: 0.7716
+val Loss: 1.1517 Acc: 0.7337
+##############################
+#epoch: 87
+train Loss: 1.8757 Acc: 0.7761
+val Loss: 1.1195 Acc: 0.7490
+##############################
+#epoch: 88
+train Loss: 2.0008 Acc: 0.7466
+val Loss: 1.2028 Acc: 0.7146
+##############################
+#epoch: 89
+train Loss: 1.7037 Acc: 0.7895
+val Loss: 1.1029 Acc: 0.7471
+##############################
+#epoch: 90
+train Loss: 1.6434 Acc: 0.8189
+val Loss: 1.0797 Acc: 0.7356
+##############################
+#epoch: 91
+train Loss: 1.6920 Acc: 0.8119
+val Loss: 1.1095 Acc: 0.7529
+##############################
+#epoch: 92
+train Loss: 1.8344 Acc: 0.7818
+val Loss: 1.0985 Acc: 0.7586
+##############################
+#epoch: 93
+train Loss: 1.7871 Acc: 0.8100
+val Loss: 1.0463 Acc: 0.7510
+##############################
+#epoch: 94
+train Loss: 1.6732 Acc: 0.8145
+val Loss: 1.1296 Acc: 0.7356
+##############################
+#epoch: 95
+train Loss: 1.6960 Acc: 0.8017
+val Loss: 1.0453 Acc: 0.7567
+##############################
+#epoch: 96
+train Loss: 1.4703 Acc: 0.8528
+val Loss: 0.9729 Acc: 0.7682
+##############################
+#epoch: 97
+train Loss: 1.6587 Acc: 0.8145
+val Loss: 1.0957 Acc: 0.7433
+##############################
+#epoch: 98
+train Loss: 1.6012 Acc: 0.8177
+val Loss: 1.0278 Acc: 0.7414
+##############################
+#epoch: 99
+train Loss: 1.6130 Acc: 0.8196
+val Loss: 0.9776 Acc: 0.7778
+Testing started
+Test Loss: 0.9953 Acc: 0.7743
+--RWTH reggen--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Size of generated dataset: 39000
+Using imagenet weights.
+Training started
+##############################
+#epoch: 0
+train Loss: 10.0837 Acc: 0.0505
+val Loss: 4.8180 Acc: 0.0670
+##############################
+#epoch: 1
+train Loss: 6.9764 Acc: 0.1881
+val Loss: 3.9776 Acc: 0.1418
+##############################
+#epoch: 2
+train Loss: 5.7621 Acc: 0.2297
+val Loss: 3.5043 Acc: 0.1284
+##############################
+#epoch: 3
+train Loss: 5.3632 Acc: 0.2310
+val Loss: 3.2533 Acc: 0.1513
+##############################
+#epoch: 4
+train Loss: 5.0386 Acc: 0.2617
+val Loss: 3.1672 Acc: 0.1533
+##############################
+#epoch: 5
+train Loss: 4.8425 Acc: 0.2578
+val Loss: 3.2749 Acc: 0.1418
+##############################
+#epoch: 6
+train Loss: 4.7456 Acc: 0.2290
+val Loss: 3.1623 Acc: 0.1648
+##############################
+#epoch: 7
+train Loss: 4.5971 Acc: 0.2700
+val Loss: 2.9470 Acc: 0.1552
+##############################
+#epoch: 8
+train Loss: 4.4768 Acc: 0.2726
+val Loss: 3.0063 Acc: 0.1782
+##############################
+#epoch: 9
+train Loss: 4.3998 Acc: 0.3090
+val Loss: 2.8042 Acc: 0.1897
+##############################
+#epoch: 10
+train Loss: 4.2846 Acc: 0.3001
+val Loss: 2.7734 Acc: 0.2184
+##############################
+#epoch: 11
+train Loss: 4.2394 Acc: 0.2911
+val Loss: 2.7609 Acc: 0.2452
+##############################
+#epoch: 12
+train Loss: 4.1419 Acc: 0.2937
+val Loss: 2.7352 Acc: 0.2318
+##############################
+#epoch: 13
+train Loss: 4.0312 Acc: 0.3333
+val Loss: 2.7073 Acc: 0.2586
+##############################
+#epoch: 14
+train Loss: 3.9718 Acc: 0.3461
+val Loss: 2.5873 Acc: 0.2548
+##############################
+#epoch: 15
+train Loss: 3.8808 Acc: 0.3532
+val Loss: 2.5811 Acc: 0.2644
+##############################
+#epoch: 16
+train Loss: 3.8425 Acc: 0.3448
+val Loss: 2.5840 Acc: 0.2931
+##############################
+#epoch: 17
+train Loss: 3.7809 Acc: 0.3557
+val Loss: 2.5135 Acc: 0.3008
+##############################
+#epoch: 18
+train Loss: 3.6940 Acc: 0.3820
+val Loss: 2.4793 Acc: 0.3410
+##############################
+#epoch: 19
+train Loss: 3.6300 Acc: 0.3948
+val Loss: 2.4333 Acc: 0.3238
+##############################
+#epoch: 20
+train Loss: 3.5537 Acc: 0.3909
+val Loss: 2.3955 Acc: 0.4061
+##############################
+#epoch: 21
+train Loss: 3.4666 Acc: 0.4203
+val Loss: 2.3621 Acc: 0.3870
+##############################
+#epoch: 22
+train Loss: 3.3997 Acc: 0.4306
+val Loss: 2.2780 Acc: 0.4061
+##############################
+#epoch: 23
+train Loss: 3.3566 Acc: 0.4216
+val Loss: 2.2249 Acc: 0.4310
+##############################
+#epoch: 24
+train Loss: 3.2777 Acc: 0.4331
+val Loss: 2.2291 Acc: 0.4349
+##############################
+#epoch: 25
+train Loss: 3.2443 Acc: 0.4485
+val Loss: 2.3384 Acc: 0.4521
+##############################
+#epoch: 26
+train Loss: 3.2265 Acc: 0.4504
+val Loss: 2.2490 Acc: 0.4559
+##############################
+#epoch: 27
+train Loss: 3.1548 Acc: 0.4511
+val Loss: 2.2222 Acc: 0.4847
+##############################
+#epoch: 28
+train Loss: 3.0961 Acc: 0.4786
+val Loss: 2.2135 Acc: 0.4789
+##############################
+#epoch: 29
+train Loss: 3.0684 Acc: 0.4939
+val Loss: 2.1577 Acc: 0.4789
+##############################
+#epoch: 30
+train Loss: 2.9318 Acc: 0.5093
+val Loss: 2.2111 Acc: 0.4962
+##############################
+#epoch: 31
+train Loss: 2.9753 Acc: 0.4875
+val Loss: 2.2265 Acc: 0.4674
+##############################
+#epoch: 32
+train Loss: 2.9307 Acc: 0.5080
+val Loss: 2.2215 Acc: 0.4732
+##############################
+#epoch: 33
+train Loss: 2.8571 Acc: 0.5189
+val Loss: 2.1390 Acc: 0.4923
+##############################
+#epoch: 34
+train Loss: 2.8265 Acc: 0.5189
+val Loss: 2.1561 Acc: 0.4943
+##############################
+#epoch: 35
+train Loss: 2.8003 Acc: 0.5298
+val Loss: 2.1556 Acc: 0.5134
+##############################
+#epoch: 36
+train Loss: 2.7374 Acc: 0.5349
+val Loss: 2.0571 Acc: 0.5211
+##############################
+#epoch: 37
+train Loss: 2.7233 Acc: 0.5381
+val Loss: 2.1800 Acc: 0.5115
+##############################
+#epoch: 38
+train Loss: 2.7014 Acc: 0.5374
+val Loss: 2.1840 Acc: 0.5038
+##############################
+#epoch: 39
+train Loss: 2.6087 Acc: 0.5784
+val Loss: 2.0148 Acc: 0.5402
+##############################
+#epoch: 40
+train Loss: 2.5690 Acc: 0.5969
+val Loss: 2.0413 Acc: 0.5268
+##############################
+#epoch: 41
+train Loss: 2.5823 Acc: 0.5969
+val Loss: 2.0524 Acc: 0.5172
+##############################
+#epoch: 42
+train Loss: 2.5086 Acc: 0.6046
+val Loss: 2.0801 Acc: 0.5594
+##############################
+#epoch: 43
+train Loss: 2.4421 Acc: 0.6232
+val Loss: 2.0477 Acc: 0.5632
+##############################
+#epoch: 44
+train Loss: 2.5384 Acc: 0.5950
+val Loss: 2.0439 Acc: 0.5805
+##############################
+#epoch: 45
+train Loss: 2.4280 Acc: 0.6212
+val Loss: 1.9383 Acc: 0.5977
+##############################
+#epoch: 46
+train Loss: 2.4742 Acc: 0.6123
+val Loss: 1.9411 Acc: 0.5785
+##############################
+#epoch: 47
+train Loss: 2.4704 Acc: 0.6129
+val Loss: 2.0474 Acc: 0.5824
+##############################
+#epoch: 48
+train Loss: 2.3531 Acc: 0.6340
+val Loss: 2.0540 Acc: 0.5594
+##############################
+#epoch: 49
+train Loss: 2.2715 Acc: 0.6673
+val Loss: 1.9710 Acc: 0.5843
+##############################
+#epoch: 50
+train Loss: 2.3016 Acc: 0.6276
+val Loss: 2.0630 Acc: 0.6054
+##############################
+#epoch: 51
+train Loss: 2.2581 Acc: 0.6686
+val Loss: 2.0331 Acc: 0.5862
+##############################
+#epoch: 52
+train Loss: 2.3483 Acc: 0.6340
+val Loss: 2.0346 Acc: 0.5939
+##############################
+#epoch: 53
+train Loss: 2.3384 Acc: 0.6360
+val Loss: 2.1382 Acc: 0.5958
+##############################
+#epoch: 54
+train Loss: 2.2708 Acc: 0.6615
+val Loss: 2.0622 Acc: 0.6111
+##############################
+#epoch: 55
+train Loss: 2.2714 Acc: 0.6532
+val Loss: 2.0433 Acc: 0.5900
+##############################
+#epoch: 56
+train Loss: 2.2729 Acc: 0.6302
+val Loss: 2.0828 Acc: 0.5977
+##############################
+#epoch: 57
+train Loss: 2.1760 Acc: 0.6827
+val Loss: 1.9672 Acc: 0.6054
+##############################
+#epoch: 58
+train Loss: 2.0873 Acc: 0.7070
+val Loss: 1.9886 Acc: 0.6073
+##############################
+#epoch: 59
+train Loss: 2.1711 Acc: 0.6846
+val Loss: 2.0337 Acc: 0.6341
+##############################
+#epoch: 60
+train Loss: 2.0862 Acc: 0.7083
+val Loss: 1.9760 Acc: 0.6034
+##############################
+#epoch: 61
+train Loss: 2.1098 Acc: 0.7038
+val Loss: 2.0286 Acc: 0.6092
+##############################
+#epoch: 62
+train Loss: 2.1481 Acc: 0.6878
+val Loss: 2.0517 Acc: 0.6111
+##############################
+#epoch: 63
+train Loss: 2.0966 Acc: 0.6987
+val Loss: 1.9209 Acc: 0.5977
+##############################
+#epoch: 64
+train Loss: 2.0987 Acc: 0.6923
+val Loss: 1.9575 Acc: 0.6245
+##############################
+#epoch: 65
+train Loss: 2.0191 Acc: 0.7153
+val Loss: 2.0099 Acc: 0.6456
+##############################
+#epoch: 66
+train Loss: 2.0380 Acc: 0.7115
+val Loss: 1.9550 Acc: 0.6552
+##############################
+#epoch: 67
+train Loss: 2.0383 Acc: 0.7127
+val Loss: 2.0974 Acc: 0.5977
+##############################
+#epoch: 68
+train Loss: 1.9355 Acc: 0.7370
+val Loss: 1.9085 Acc: 0.6418
+##############################
+#epoch: 69
+train Loss: 1.9222 Acc: 0.7569
+val Loss: 1.9306 Acc: 0.6015
+##############################
+#epoch: 70
+train Loss: 1.9620 Acc: 0.7115
+val Loss: 1.8899 Acc: 0.6456
+##############################
+#epoch: 71
+train Loss: 1.9699 Acc: 0.7274
+val Loss: 1.8570 Acc: 0.6648
+##############################
+#epoch: 72
+train Loss: 1.8817 Acc: 0.7466
+val Loss: 1.8530 Acc: 0.6724
+##############################
+#epoch: 73
+train Loss: 1.8392 Acc: 0.7665
+val Loss: 1.7422 Acc: 0.6705
+##############################
+#epoch: 74
+train Loss: 1.8836 Acc: 0.7575
+val Loss: 1.8853 Acc: 0.6762
+##############################
+#epoch: 75
+train Loss: 1.8055 Acc: 0.7620
+val Loss: 1.8831 Acc: 0.6724
+##############################
+#epoch: 76
+train Loss: 1.8735 Acc: 0.7543
+val Loss: 1.8891 Acc: 0.6877
+##############################
+#epoch: 77
+train Loss: 1.8255 Acc: 0.7710
+val Loss: 1.7853 Acc: 0.6743
+##############################
+#epoch: 78
+train Loss: 1.7473 Acc: 0.7959
+val Loss: 1.9311 Acc: 0.6552
+##############################
+#epoch: 79
+train Loss: 1.8687 Acc: 0.7614
+val Loss: 1.7690 Acc: 0.6992
+##############################
+#epoch: 80
+train Loss: 1.8660 Acc: 0.7575
+val Loss: 1.8114 Acc: 0.6877
+##############################
+#epoch: 81
+train Loss: 1.7591 Acc: 0.8081
+val Loss: 1.7597 Acc: 0.6858
+##############################
+#epoch: 82
+train Loss: 1.7532 Acc: 0.7901
+val Loss: 1.7188 Acc: 0.6762
+##############################
+#epoch: 83
+train Loss: 1.7783 Acc: 0.7869
+val Loss: 1.6932 Acc: 0.6916
+##############################
+#epoch: 84
+train Loss: 1.7611 Acc: 0.7940
+val Loss: 1.7328 Acc: 0.6858
+##############################
+#epoch: 85
+train Loss: 1.8322 Acc: 0.7543
+val Loss: 1.7719 Acc: 0.7107
+##############################
+#epoch: 86
+train Loss: 1.7064 Acc: 0.8093
+val Loss: 1.8444 Acc: 0.6954
+##############################
+#epoch: 87
+train Loss: 1.7984 Acc: 0.7837
+val Loss: 1.8011 Acc: 0.6820
+##############################
+#epoch: 88
+train Loss: 1.6723 Acc: 0.8087
+val Loss: 1.7586 Acc: 0.7088
+##############################
+#epoch: 89
+train Loss: 1.7468 Acc: 0.7914
+val Loss: 1.7073 Acc: 0.6858
+##############################
+#epoch: 90
+train Loss: 1.7457 Acc: 0.7959
+val Loss: 1.7401 Acc: 0.6724
+##############################
+#epoch: 91
+train Loss: 1.7468 Acc: 0.7972
+val Loss: 1.6715 Acc: 0.7069
+##############################
+#epoch: 92
+train Loss: 1.6698 Acc: 0.8010
+val Loss: 1.8338 Acc: 0.6724
+##############################
+#epoch: 93
+train Loss: 1.6352 Acc: 0.8215
+val Loss: 1.7520 Acc: 0.7011
+##############################
+#epoch: 94
+train Loss: 1.6726 Acc: 0.8068
+val Loss: 1.8062 Acc: 0.6858
+##############################
+#epoch: 95
+train Loss: 1.6812 Acc: 0.8170
+val Loss: 1.5733 Acc: 0.7471
+##############################
+#epoch: 96
+train Loss: 1.6948 Acc: 0.7972
+val Loss: 1.7113 Acc: 0.6973
+##############################
+#epoch: 97
+train Loss: 1.6190 Acc: 0.8343
+val Loss: 1.6512 Acc: 0.7337
+##############################
+#epoch: 98
+train Loss: 1.6317 Acc: 0.8241
+val Loss: 1.6683 Acc: 0.7184
+##############################
+#epoch: 99
+train Loss: 1.5846 Acc: 0.8279
+val Loss: 1.7800 Acc: 0.6858
+Testing started
+Test Loss: 1.6537 Acc: 0.7252
+--Class accuracy real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 1.9890 Acc: 0.5005
+Calculating class accuracy
+--Class accuracy generated--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7156 Acc: 0.8592
+Calculating class accuracy
+--Confusion matrix real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 2.0363 Acc: 0.5101
+Creating confusion matrix
+--Confusion matrix generated--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7047 Acc: 0.8582
+Creating confusion matrix
+--Confusion matrix generated--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7208 Acc: 0.8554
+Creating confusion matrix
+[[151   2   0 ...   0   0   0]
+ [  1  92   0 ...   0   1   0]
+ [  2   1  30 ...   0   2   1]
+ ...
+ [  0   0   0 ...   3   0   0]
+ [  1   0   0 ...   0  58   0]
+ [  1   0   0 ...   0   2   7]]
+--Confusion matrix real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 2.0550 Acc: 0.5024
+Creating confusion matrix
+--Confusion matrix generated--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7125 Acc: 0.8573
+Creating confusion matrix
+--Confusion matrix real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 2.0374 Acc: 0.4947
+Creating confusion matrix
+--Confusion matrix generated--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7126 Acc: 0.8592
+Creating confusion matrix
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7594 Acc: 0.8505
+Calculating class accuracy
+--Class accuracy real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7764 Acc: 0.8447
+Calculating class accuracy
+--Class accuracy real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 2.0415 Acc: 0.5005
+Calculating class accuracy
+--Class accuracy real--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 1563
+Size of validation dataset: 522
+Size of test dataset: 1037
+Not using imagenet weights.
+Testing started
+Test Loss: 0.7762 Acc: 0.8438
+Calculating class accuracy
+--train hagrid classifier on real data--
+/home/grios/myphyton/lib/python3.10/site-packages/torchvision/transforms/transforms.py:332: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+You have chosen a specific GPU. This will completely disable data parallelism.
+Size of train dataset: 267401
+Size of validation dataset: 89134
+Size of test dataset: 3600
+Using imagenet weights.
+Training started
+##############################
+#epoch: 0
+train Loss: 2.0693 Acc: 0.6737
+val Loss: 0.7165 Acc: 0.8788
+##############################
+#epoch: 1
+train Loss: 1.4487 Acc: 0.9013
+val Loss: 0.6177 Acc: 0.8937
+##############################
+#epoch: 2
+train Loss: 1.2716 Acc: 0.9391
+val Loss: 0.5457 Acc: 0.8999
+##############################
+#epoch: 3
+train Loss: 1.1691 Acc: 0.9575
+val Loss: 0.5238 Acc: 0.9006
+##############################
+#epoch: 4
+train Loss: 1.1058 Acc: 0.9661
+val Loss: 1.3513 Acc: 0.8808
+##############################
+#epoch: 5
+train Loss: 1.0682 Acc: 0.9703
+val Loss: 0.4547 Acc: 0.9043
+##############################
+#epoch: 6
+train Loss: 1.0397 Acc: 0.9738
+val Loss: 0.4390 Acc: 0.9031
+##############################
+#epoch: 7
+train Loss: 1.0229 Acc: 0.9758
+val Loss: 0.4153 Acc: 0.9064
+##############################
+#epoch: 8
+train Loss: 1.0069 Acc: 0.9770
+val Loss: 0.3978 Acc: 0.9061
+##############################
+#epoch: 9
+train Loss: 0.9967 Acc: 0.9783
+val Loss: 0.3758 Acc: 0.9071
+Testing started
+Test Loss: 0.3475 Acc: 0.9103

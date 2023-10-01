@@ -275,7 +275,7 @@ class WORKER(object):
                         batch_size=self.OPTIMIZATION.batch_size,
                         z_dim=self.MODEL.z_dim,
                         num_classes=self.DATA.num_classes,
-                        y_sampler= self.sample_data_basket()[2],
+                        y_sampler= self.sample_data_basket()[2] if self.RUN.pose else "totally_random",
                         radius=self.LOSS.radius,
                         generator=self.Gen,
                         discriminator=self.Dis,
@@ -554,7 +554,7 @@ class WORKER(object):
                         batch_size=self.OPTIMIZATION.batch_size,
                         z_dim=self.MODEL.z_dim,
                         num_classes=self.DATA.num_classes,
-                        y_sampler=self.sample_data_basket()[2],
+                        y_sampler=self.sample_data_basket()[2] if self.RUN.pose else "totally_random",
                         radius=self.LOSS.radius,
                         generator=self.Gen,
                         discriminator=self.Dis,
@@ -674,7 +674,7 @@ class WORKER(object):
                         batch_size=self.OPTIMIZATION.batch_size // 2,
                         z_dim=self.MODEL.z_dim,
                         num_classes=self.DATA.num_classes,
-                        y_sampler=self.sample_data_basket()[2],
+                        y_sampler=self.sample_data_basket()[2] if self.RUN.pose else "totally_random",
                         #y_sampler=iter(self.train_dataloader) if self.RUN.pose else "totally_random",
                         radius=self.LOSS.radius,
                         generator=self.Gen,
@@ -1075,7 +1075,7 @@ class WORKER(object):
     # -----------------------------------------------------------------------------
     # save fake images to use as a new dataset.
     # -----------------------------------------------------------------------------
-    def save_dataset(self, num_images):
+    def save_dataset(self, num_images, label_generator, directory_clean):
         if self.global_rank == 0:
             self.logger.info("save {num_images} generated images in png format.".format(
                 num_images=num_images))
@@ -1087,28 +1087,27 @@ class WORKER(object):
             misc.make_GAN_untrainable(self.Gen, self.Gen_ema, self.Dis)
             generator, generator_mapping, generator_synthesis = self.gen_ctlr.prepare_generator()
 
-            for i in range(self.DATA.num_classes):
-                misc.save_images_png(data_loader=self.train_dataloader,
-                                    generator=generator,
-                                    discriminator=self.Dis,
-                                    is_generate=True,
-                                    num_images=num_images,
-                                    y_sampler=i,
-                                    batch_size=self.OPTIMIZATION.batch_size,
-                                    z_prior=self.MODEL.z_prior,
-                                    truncation_factor=self.RUN.truncation_factor,
-                                    z_dim=self.MODEL.z_dim,
-                                    num_classes=self.DATA.num_classes,
-                                    LOSS=self.LOSS,
-                                    OPTIMIZATION=self.OPTIMIZATION,
-                                    RUN=self.RUN,
-                                    MODEL=self.MODEL,
-                                    is_stylegan=self.is_stylegan,
-                                    generator_mapping=generator_mapping,
-                                    generator_synthesis=generator_synthesis,
-                                    directory=join(self.RUN.save_dir, "samples", self.run_name),
-                                    directory_clean= True if (i==0) else False,
-                                    device=self.local_rank)
+            misc.save_images_png(data_loader=self.train_dataloader,
+                                generator=generator,
+                                discriminator=self.Dis,
+                                is_generate=True,
+                                num_images=num_images,
+                                y_sampler=label_generator,
+                                batch_size=self.OPTIMIZATION.batch_size,
+                                z_prior=self.MODEL.z_prior,
+                                truncation_factor=self.RUN.truncation_factor,
+                                z_dim=self.MODEL.z_dim,
+                                num_classes=self.DATA.num_classes,
+                                LOSS=self.LOSS,
+                                OPTIMIZATION=self.OPTIMIZATION,
+                                RUN=self.RUN,
+                                MODEL=self.MODEL,
+                                is_stylegan=self.is_stylegan,
+                                generator_mapping=generator_mapping,
+                                generator_synthesis=generator_synthesis,
+                                directory=join(self.RUN.save_dir, "samples", self.run_name),
+                                directory_clean=directory_clean,
+                                device=self.local_rank)
 
         misc.make_GAN_trainable(self.Gen, self.Gen_ema, self.Dis)
 
@@ -1154,7 +1153,7 @@ class WORKER(object):
                                                                         batch_size=self.OPTIMIZATION.batch_size,
                                                                         z_dim=self.MODEL.z_dim,
                                                                         num_classes=self.DATA.num_classes,
-                                                                        y_sampler=self.sample_data_basket()[2],
+                                                                        y_sampler=self.sample_data_basket()[2] if self.RUN.pose else "totally_random",
                                                                         radius="N/A",
                                                                         generator=generator,
                                                                         discriminator=self.Dis,

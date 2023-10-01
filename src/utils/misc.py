@@ -13,6 +13,7 @@ import os
 import sys
 import glob
 import warnings
+import itertools
 
 from torch.nn import DataParallel
 from torchvision.datasets import CIFAR10, CIFAR100
@@ -32,7 +33,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-import pyopenpose as op
+#import pyopenpose as op
 from torch.utils.data import Sampler, BatchSampler
 
 import utils.sample as sample
@@ -496,10 +497,22 @@ def save_images_png(data_loader, generator, discriminator, is_generate, num_imag
         if not exists(join(directory, str(f))):
             os.makedirs(join(directory, str(f)))
 
+    if RUN.pose:
+        y_sampler = itertools.cycle(y_sampler)
+        """
+        y_data_loader = y_sampler
+        y_sampler = iter(y_data_loader)
+        iter_sampler = 1
+        """
     with torch.no_grad() if not LOSS.apply_lo else dummy_context_mgr() as mpc:
         for i in tqdm(range(0, num_batches), disable=False):
             start = i * batch_size
             end = start + batch_size
+            """if RUN.pose and end>iter_sampler*len(y_data_loader.dataset):
+                print("entro aca")
+                y_sampler = iter(y_data_loader)
+                iter_sampler += 1
+            """
             if is_generate:
                 images, labels, _, _, _, _, _= sample.generate_images(z_prior=z_prior,
                                                                  truncation_factor=truncation_factor,
@@ -651,6 +664,7 @@ def dataset_with_indices(cls):
         '__getitem__': __getitem__,
     })
 
+"""
 def op_start(params):
     if not params:
         params = dict()
@@ -691,6 +705,7 @@ def anatomic_confidence(generatedImage, opWrapper):
     generatedKeypoints = generate_keypoints(generatedImage, opWrapper)
     confidences = [keypoints[i] for i in range(2,len(generatedKeypoints),3)] 
     return sum(confidences)/(len(generatedKeypoints)/3), min(confidences), max(confidences)
+"""
 
 class RandomBatchSampler(Sampler):
     """Sampling class to create random sequential batches from a given dataset
@@ -721,6 +736,23 @@ class RandomBatchSampler(Sampler):
             idx = torch.arange(int(self.n_batches) * self.batch_size, self.dataset_length)
             for index in idx:
                 yield int(index)
+
+class SingleClassSampler(Sampler):
+    def __init__(self, dataset, class_label, pose):
+        self.dataset = dataset
+        self.class_label = class_label
+        if pose:
+            self.indices = [i for i, (_, label, _) in enumerate(dataset) if label == class_label]
+        else:
+            self.indices = [i for i, (_, label) in enumerate(dataset) if label == class_label]
+        random.shuffle(self.indices)
+        print(len(self.indices))
+
+    def __iter__(self):
+        return iter(self.indices)
+
+    def __len__(self):
+        return len(self.indices)
 
 def weak_shuffling_sampler(dataset, batch_size, drop_last):
     return RandomBatchSampler(dataset, batch_size)

@@ -11,7 +11,7 @@ import os
 import pickle
 import sys
 sys.path.append('./')
-from utils.loops import train, test, filter, create_confusion_matrix
+from utils.loops import train, test, filter, create_confusion_matrix, calculate_class_accuracy
 import utils.misc as misc
 from data_util import Dataset_
 from pathlib import Path
@@ -29,6 +29,7 @@ def prepare_evaluation():
     parser.add_argument("-lm", "--load_model", type=str, default=None)
     parser.add_argument("--top_k", default=-1, type=int)
     parser.add_argument("-cm", action="store_true", help="confusion matrix")
+    parser.add_argument("--class_accuracy", action="store_true", help="calculate class accuracy")
     parser.add_argument("--n_classes", default=13, type=int, help="number of classes")
     parser.add_argument("--dset_used", default=1., type=float, help="percentage of the dataset to be used when training the classifier")
     parser.add_argument("--val_size", default=0.25, type=float, help="validation size")
@@ -36,6 +37,7 @@ def prepare_evaluation():
     parser.add_argument("--reg_alpha", default=1., type=float, help="regularization loss starting weight.")
     parser.add_argument("--reg_beta", default=-1., type=float, help="regularization loss weight change.")
     parser.add_argument("-l", "--load_data_in_memory", action="store_true", help="put the whole train dataset on the main memory for fast I/O")
+    parser.add_argument("--imagenet_weights", action="store_true")
 
     parser.add_argument("--seed", type=int, default=-1, help="seed for generating random numbers")
     parser.add_argument("-DDP", "--distributed_data_parallel", action="store_true")
@@ -77,7 +79,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     # load real and generated datasets.
     # -----------------------------------------------------------------------------
-    train_dataset = Dataset_(data_name='rwth-train',
+    train_dataset = Dataset_(data_name='train',
                            data_dir=args.dset1,
                            train=True,
                            crop_long_edge=True,
@@ -87,7 +89,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                            hdf5_path=None,
                            load_data_in_memory=args.load_data_in_memory,
                            pose=False)
-    test_dataset = Dataset_(data_name='rwth-test',
+    test_dataset = Dataset_(data_name='test',
                            data_dir=args.dset1,
                            train=False,
                            crop_long_edge=True,
@@ -98,7 +100,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
                            load_data_in_memory=args.load_data_in_memory,
                            pose=False)
     if args.dset2 != 'none':
-        gen_dataset = Dataset_(data_name='rwth-gen-spade',
+        gen_dataset = Dataset_(data_name='gen',
                                data_dir=args.dset2,
                                train=True,
                                crop_long_edge=True,
@@ -170,8 +172,13 @@ def classify(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     # load a network (Efficientnet v2).
     # -----------------------------------------------------------------------------
-    weights = models.EfficientNet_V2_M_Weights.IMAGENET1K_V1
-    model = models.efficientnet_v2_m(weights=weights)
+    if args.imagenet_weights:
+        print("Using imagenet weights.")
+        weights = models.EfficientNet_V2_M_Weights.IMAGENET1K_V1
+        model = models.efficientnet_v2_m(weights=weights)
+    else:
+        print("Not using imagenet weights.")
+        model = models.efficientnet_v2_m()
     num_ftrs = model.classifier[1].in_features
     model.fc = nn.Linear(num_ftrs, args.n_classes)
     model = model.to(local_rank)
@@ -203,7 +210,7 @@ def classify(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     if args.top_k>0:
         if args.dset2 != 'none':
-            gen_dataset = misc.dataset_with_indices(Dataset_)(data_name='rwth-gen-spade',
+            gen_dataset = misc.dataset_with_indices(Dataset_)(data_name='gen',
                                 data_dir=args.dset2,
                                 train=True,
                                 crop_long_edge=True,
@@ -232,6 +239,12 @@ def classify(local_rank, args, world_size, gpus_per_node):
     # -----------------------------------------------------------------------------
     if args.cm:
         create_confusion_matrix(model, dataloaders, save_dir = args.save_dir, device = local_rank)
+
+    # -----------------------------------------------------------------------------
+    # calculate class accuracy.
+    # -----------------------------------------------------------------------------
+    if args.class_accuracy:
+        calculate_class_accuracy(model, dataloaders, save_dir = args.save_dir, device = local_rank)
 
 if __name__ == "__main__":
     args, world_size, gpus_per_node, rank = prepare_evaluation()

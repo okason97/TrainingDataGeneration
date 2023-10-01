@@ -189,7 +189,7 @@ def generate_images(z_prior, truncation_factor, batch_size, z_dim, num_classes, 
         fake_images_eps = None
 
     if hasattr(y_sampler, '__next__'):
-        if MODEL.d_cond_mtd == 'CAT' and not RUN.save_fake_images:
+        if MODEL.d_cond_mtd == 'CAT' and not RUN.save_fake_images and not RUN.save_dataset_images:
             fake_labels = fake_labels[1]
         else:
             fake_labels = fake_labels[0]            

@@ -248,6 +248,38 @@ def create_confusion_matrix(model, dataloaders, save_dir, device = 'cuda'):
 
     print("Creating confusion matrix")
 
+    y_true, y_pred = get_preds(model, dataloaders, device)
+  
+    cfm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize = (10,7))
+    cfm_plot = sn.heatmap(cfm, annot=False)
+    cfm_plot.figure.savefig(save_dir+"cfm.png")
+
+def calculate_class_accuracy(model, dataloaders, save_dir, device = 'cuda'):
+    print("Calculating class accuracy")
+
+    y_true, y_pred = get_preds(model, dataloaders, device)
+   
+    ca = class_accuracy(y_true, y_pred)
+    with open(save_dir+'class_accuracy.pkl', 'wb') as f:
+        pickle.dump(ca, f)
+
+def class_accuracy(y_true, y_pred):
+    class_accuracy = {}
+
+    for y_t, y_p in zip(y_true, y_pred):
+        if y_t not in class_accuracy:
+            class_accuracy[y_t] = {"t_sum": y_t==y_p, "count": 1}
+        else:
+            class_accuracy[y_t]["t_sum"] += (y_t==y_p)            
+            class_accuracy[y_t]["count"] += 1            
+
+    for key in class_accuracy:
+        class_accuracy[key] = class_accuracy[key]["t_sum"]/class_accuracy[key]["count"]
+    
+    return class_accuracy
+
+def get_preds(model, dataloaders, device = 'cuda'):
     model.eval()   # Set model to evaluate mode
 
     y_true = []
@@ -264,8 +296,5 @@ def create_confusion_matrix(model, dataloaders, save_dir, device = 'cuda'):
 
         y_true += labels.tolist()
         y_pred += preds.tolist()
-   
-    cfm = confusion_matrix(y_true, y_pred)
-    plt.figure(figsize = (10,7))
-    cfm_plot = sn.heatmap(cfm, annot=True)
-    cfm_plot.figure.savefig(save_dir+"cfm.png")
+
+    return y_true, y_pred

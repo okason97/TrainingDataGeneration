@@ -138,8 +138,8 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path, hdf5_path_
     else:
         train_dataset = None
 
-    if len(cfgs.RUN.eval_metrics) + +cfgs.RUN.save_real_images + cfgs.RUN.k_nearest_neighbor + \
-            cfgs.RUN.frequency_analysis + cfgs.RUN.tsne_analysis:
+    if (len(cfgs.RUN.eval_metrics) + +cfgs.RUN.save_real_images + cfgs.RUN.k_nearest_neighbor + \
+            cfgs.RUN.frequency_analysis + cfgs.RUN.tsne_analysis) or cfgs.RUN.save_dataset_images and cfgs.RUN.pose:
         if local_rank == 0:
             logger.info("Load {name} {ref} dataset.".format(name=cfgs.DATA.name, ref=cfgs.RUN.ref_dataset))
         eval_dataset = Dataset_(data_name=cfgs.DATA.name,
@@ -447,7 +447,19 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path, hdf5_path_
     if cfgs.RUN.save_dataset_images:
         if global_rank == 0:
             print(""), logger.info("-" * 80)
-        worker.save_dataset(num_images=cfgs.RUN.save_dataset_images_num)
+        for i in range(cfgs.DATA.num_classes):
+            if cfgs.RUN.pose:
+                single_class_sampler = misc.SingleClassSampler(eval_dataset, i, cfgs.RUN.pose)
+                label_generator = DataLoader(dataset=eval_dataset,
+                                    batch_size=cfgs.OPTIMIZATION.basket_size,
+                                    pin_memory=True,
+                                    num_workers=cfgs.RUN.num_workers,
+                                    sampler=single_class_sampler,
+                                    drop_last=False,
+                                    persistent_workers=True)
+            else:
+                label_generator = i
+            worker.save_dataset(num_images=cfgs.RUN.save_dataset_images_num, label_generator=label_generator, directory_clean= True if (i==0) else False)
 
     if cfgs.RUN.vis_fake_images:
         if global_rank == 0:
