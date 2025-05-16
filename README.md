@@ -1,4 +1,4 @@
-# PyTorch StudioGAN for Training Data Generation
+# Handshape Training Data Generation
 
 Generate synthetic training data for hand gesture recognition. The framework includes support for pose-conditioned image generation, which allows controlling the hand pose in generated images.
 
